@@ -9,12 +9,16 @@
 
     <packaging>pom</packaging>
 
-    <!--distributionManagement>
+    <distributionManagement>
+        <snapshotRepository>
+            <id>kantega-snapshots</id>
+            <url>http://nexus.kantega.lan/content/repositories/snapshots</url>
+        </snapshotRepository>
         <repository>
-            <id>svvunvdbpoc09</id>
-            <url>http://svvunvdbpoc09.vegvesen.no:9092/content/repositories/releases/</url>
+            <id>kantega-releases</id>
+            <url>http://nexus.kantega.lan/content/repositories/releases</url>
         </repository>
-    </distributionManagement-->
+    </distributionManagement>
 
     <properties>
         <junit.version>4.11</junit.version>
