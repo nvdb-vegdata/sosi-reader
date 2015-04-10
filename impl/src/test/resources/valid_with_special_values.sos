@@ -1,0 +1,7 @@
+.HODE
+..TEGNSETT ISO8859-1
+.PUNKT 1:
+..NAVN "Tore""" & ' "Eide'' ' & "Andersen"
+..KVALITET 96 * 0 * 5
+..STØRRELSE @
+.SLUTT
