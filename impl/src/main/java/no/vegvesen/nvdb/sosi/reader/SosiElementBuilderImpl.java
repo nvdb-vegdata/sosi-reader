@@ -13,9 +13,11 @@ import no.vegvesen.nvdb.sosi.utils.BufferPool;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -205,8 +207,10 @@ class SosiElementBuilderImpl implements SosiElementBuilder {
         }
 
         @Override
-        public List<SosiElement> findSubElements(String name) {
-            return subElements().filter(e -> e.getName().equalsIgnoreCase(name)).collect(toList());
+        public List<SosiElement> findSubElements(String... names) {
+            Objects.requireNonNull(names, "No names specified");
+            List<String> namesToFind = Arrays.stream(names).map(String::toUpperCase).collect(toList());
+            return subElements().filter(e -> namesToFind.contains(e.getName().toUpperCase())).collect(toList());
         }
 
         @Override

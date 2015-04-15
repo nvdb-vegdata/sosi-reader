@@ -25,7 +25,7 @@ public interface SosiElement {
 
     Optional<SosiElement> findSubElementRecursively(String name);
 
-    List<SosiElement> findSubElements(String name);
+    List<SosiElement> findSubElements(String... names);
 
     Stream<SosiElement> subElements();
 
