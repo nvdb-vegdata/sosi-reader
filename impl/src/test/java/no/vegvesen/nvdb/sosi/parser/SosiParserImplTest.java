@@ -1,16 +1,14 @@
 package no.vegvesen.nvdb.sosi.parser;
 
 import no.vegvesen.nvdb.sosi.Sosi;
-import no.vegvesen.nvdb.sosi.parser.SosiParser;
-import no.vegvesen.nvdb.sosi.parser.SosiParsingException;
 import org.junit.Test;
 
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
 
-import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
+import static no.vegvesen.nvdb.sosi.TestUtils.getResource;
 import static no.vegvesen.nvdb.sosi.parser.SosiParser.Event;
 import static no.vegvesen.nvdb.sosi.parser.SosiParser.Event.START_ELEMENT;
 import static no.vegvesen.nvdb.sosi.parser.SosiParser.Event.START_HEAD;
@@ -280,14 +278,6 @@ public class SosiParserImplTest {
         }
 
         assertThat("Should not be more events from parser", parser.hasNext(), is(false));
-    }
-
-    private InputStream getResource(String name) {
-        InputStream stream = getClass().getClassLoader().getResourceAsStream(name);
-        if (isNull(stream)) {
-            throw new IllegalArgumentException("Resource " + name + " not found");
-        }
-        return stream;
     }
 
     private EventValue ev(Event event, String value) {

@@ -13,7 +13,6 @@ import no.vegvesen.nvdb.sosi.document.SosiValue;
 import no.vegvesen.nvdb.sosi.parser.SosiParser;
 import no.vegvesen.nvdb.sosi.utils.BufferPool;
 import no.vegvesen.nvdb.sosi.parser.SosiParserImpl;
-import no.vegvesen.nvdb.sosi.reader.SosiReader;
 
 import java.io.InputStream;
 import java.io.Reader;

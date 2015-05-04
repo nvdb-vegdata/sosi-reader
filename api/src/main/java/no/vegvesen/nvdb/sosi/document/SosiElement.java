@@ -9,6 +9,7 @@ import no.vegvesen.nvdb.sosi.SosiLocation;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
@@ -34,4 +35,6 @@ public interface SosiElement {
     <T> T getValueAs(Class<T> valueClass);
 
     <T> List<T> getValuesAs(Class<T> valueClass);
+
+    void transformValues(Function<Stream<SosiValue>, Stream<SosiValue>> transformer);
 }

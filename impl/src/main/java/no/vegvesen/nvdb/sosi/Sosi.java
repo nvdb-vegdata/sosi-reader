@@ -10,9 +10,14 @@ import no.vegvesen.nvdb.sosi.reader.SosiReaderImpl;
 import no.vegvesen.nvdb.sosi.utils.BufferPoolImpl;
 import no.vegvesen.nvdb.sosi.parser.SosiParserImpl;
 import no.vegvesen.nvdb.sosi.parser.SosiParser;
+import no.vegvesen.nvdb.sosi.writer.SosiValueFormatter;
+import no.vegvesen.nvdb.sosi.writer.SosiWriter;
+import no.vegvesen.nvdb.sosi.writer.SosiWriterImpl;
 
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Reader;
+import java.io.Writer;
 
 /**
  * Factory to create {@link no.vegvesen.nvdb.sosi.parser.SosiParser} and {@link SosiReader} instances.
@@ -78,5 +83,35 @@ public class Sosi {
      */
     public static SosiReader createReader(InputStream in) {
         return new SosiReaderImpl(in, new BufferPoolImpl());
+    }
+
+    /**
+     * Creates a SOSI writer which can be used to write SOSI document to the
+     * specified character stream.
+     *
+     * @param writer a i/o writer to which SOSI is written
+     */
+    public static SosiWriter createWriter(Writer writer) {
+        return new SosiWriterImpl(writer);
+    }
+
+    /**
+     * Creates a SOSI writer which can be used to write SOSI document to the
+     * specified character stream using a custom value formatter.
+     *
+     * @param writer a i/o writer to which SOSI is written
+     */
+    public static SosiWriter createWriter(Writer writer, SosiValueFormatter valueFormatter) {
+        return new SosiWriterImpl(writer, valueFormatter);
+    }
+
+    /**
+     * Creates a SOSI writer which can be used to write SOSI document to the
+     * specified byte stream.
+     *
+     * @param out i/o stream to which SOSI is written
+     */
+    public static SosiWriter createWriter(OutputStream out) {
+        return new SosiWriterImpl(out);
     }
 }

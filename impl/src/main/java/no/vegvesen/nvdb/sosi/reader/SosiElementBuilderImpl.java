@@ -19,6 +19,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static java.util.Objects.isNull;
@@ -164,7 +165,7 @@ class SosiElementBuilderImpl implements SosiElementBuilder {
         private final String name;
         private SosiLocation location;
         private final List<SosiElement> subElements;
-        private final List<SosiValue> values; // unmodifiable
+        private List<SosiValue> values;
         private final BufferPool bufferPool;
 
         SosiElementImpl(String name, SosiLocation location, List<SosiValue> values, List<SosiElement> subElements, BufferPool bufferPool) {
@@ -235,6 +236,11 @@ class SosiElementBuilderImpl implements SosiElementBuilder {
         @Override
         public <T> List<T> getValuesAs(Class<T> valueClass) {
             return values().map(valueClass::cast).collect(toList());
+        }
+
+        @Override
+        public void transformValues(Function<Stream<SosiValue>, Stream<SosiValue>> transformer) {
+            this.values = transformer.apply(values()).collect(toList());
         }
 
         @Override

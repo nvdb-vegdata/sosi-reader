@@ -139,9 +139,9 @@ public interface SosiParser extends /*Auto*/Closeable {
      * {@code false} if the parser reaches the end of the SOSI text.
      *
      * @return {@code true} if there are more parsing states.
-     * @throws Ino.vegvesen.nvdb.sosi.SosiException if an i/o error occurs (IOException
+     * @throws no.vegvesen.nvdb.sosi.SosiException if an i/o error occurs (IOException
      * would be cause of SosiException)
-     * @throws SosiParsingException if the parser encounters invalid SOSI
+     * @throws no.vegvesen.nvdb.sosi.parser.SosiParsingException if the parser encounters invalid SOSI
      * when advancing to next state.
      */
     boolean hasNext();
@@ -149,7 +149,7 @@ public interface SosiParser extends /*Auto*/Closeable {
     /**
      * Returns the event for the next parsing state.
      *
-     * @throws Ino.vegvesen.nvdb.sosi.SosiException if an i/o error occurs (IOException
+     * @throws no.vegvesen.nvdb.sosi.SosiException if an i/o error occurs (IOException
      * would be cause of SosiException)
      * @throws SosiParsingException if the parser encounters invalid SOSI
      * when advancing to next state.
@@ -270,7 +270,7 @@ public interface SosiParser extends /*Auto*/Closeable {
      * Closes this parser and frees any resources associated with the
      * parser. This method closes the underlying input source.
      *
-     * @throws Ino.vegvesen.nvdb.sosi.SosiException if an i/o error occurs (IOException
+     * @throws no.vegvesen.nvdb.sosi.SosiException if an i/o error occurs (IOException
      * would be cause of SosiException)
      */
     @Override

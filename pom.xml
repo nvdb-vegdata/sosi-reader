@@ -11,8 +11,8 @@
 
     <scm>
         <connection>scm:git:https://github.com/nvdb-opensource/sosi-reader.git</connection>
-      <tag>HEAD</tag>
-  </scm>
+        <tag>HEAD</tag>
+    </scm>
 
     <distributionManagement>
         <snapshotRepository>
