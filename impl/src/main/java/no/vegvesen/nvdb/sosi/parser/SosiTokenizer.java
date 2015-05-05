@@ -8,8 +8,6 @@ package no.vegvesen.nvdb.sosi.parser;
 import no.vegvesen.nvdb.sosi.SosiException;
 import no.vegvesen.nvdb.sosi.SosiMessages;
 import no.vegvesen.nvdb.sosi.SosiLocation;
-import no.vegvesen.nvdb.sosi.parser.SosiParser;
-import no.vegvesen.nvdb.sosi.parser.SosiParsingException;
 import no.vegvesen.nvdb.sosi.utils.BufferPool;
 
 import java.io.Closeable;
@@ -174,79 +172,112 @@ public final class SosiTokenizer implements Closeable {
         }
     }
 
-    private SosiToken readNumeric(int ch)  {
-        SosiToken token = SosiToken.VALUE_NUMBER;
-        if (ch == ':') {
+    /**
+     * Reads to next whitespace, interprets as string or number value.
+     * @return the interpreted token type
+     */
+    private SosiToken readStringOrNumber() {
+        SosiToken token = SosiToken.VALUE_STRING;
+        readString();
+
+        if (buf[storeBegin] == ':' && interpretableAsInteger(storeBegin + 1, storeEnd)) {
             token = SosiToken.COLON_VALUE;
-            storeBegin = storeEnd = readBegin;
-        } else {
-            storeBegin = storeEnd = readBegin-1;
+            storeBegin++;
+        } else if (buf[storeEnd-1] == ':' && interpretableAsInteger(storeBegin, storeEnd - 1)) {
+            token = SosiToken.VALUE_COLON;
+            storeEnd--;
+        } else if (interpretableAsNumber(storeBegin, storeEnd)) {
+            token = SosiToken.VALUE_NUMBER;
         }
 
+        return token;
+    }
+
+    /**
+     * Tests whether buffer (within given positions) contains an unsigned integer value.
+     * @param from start position in buffer (inclusive)
+     * @param to end position in buffer (exclusive)
+     * @return true if buffer (within given positions) can be interpreted as an unsigned integer value.
+     */
+    private boolean interpretableAsInteger(int from, int to)  {
+        for (int i = from; i < to; i++) {
+            if (!isDigit(buf[i])) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Tests whether buffer (within given positions) contains a signed or unsigned integer or decimal number value.
+     * @param from start position in buffer (inclusive)
+     * @param to end position in buffer (exclusive)
+     * @return true if buffer (within given positions) can be interpreted as a signed or unsigned integer or decimal number value.
+     */
+    private boolean interpretableAsNumber(int from, int to) {
+        int i = from;
+
         // sign
-        if (ch == '-' || ch == '+' || ch == ':') {
-            this.minus = (ch == '-');
-            ch = readChar();
-            if (ch < '0' || ch >'9') {
-                throw unexpectedChar(ch);
+        if (isSign(buf[i])) {
+            this.minus = (buf[i] == '-');
+            if (++i == to) {
+                return false;
             }
         }
 
         // int
-        do {
-            ch = readChar();
-        } while (ch >= '0' && ch <= '9');
-
-        if (token != SosiToken.COLON_VALUE) {
-            // frac
-            if (ch == '.') {
-                this.fracOrExp = true;
-                int count = 0;
-                do {
-                    ch = readChar();
-                    count++;
-                } while (ch >= '0' && ch <= '9');
-                if (count == 1) {
-                    throw unexpectedChar(ch);
-                }
-            }
-
-            // exp
-            if (ch == 'e' || ch == 'E' || ch == 'd' || ch == 'D') {
-                this.fracOrExp = true;
-                ch = readChar();
-                if (ch == '+' || ch == '-') {
-                    ch = readChar();
-                }
-                int count;
-                for (count = 0; ch >= '0' && ch <= '9'; count++) {
-                    ch = readChar();
-                }
-                if (count == 0) {
-                    throw unexpectedChar(ch);
-                }
+        while (isDigit(buf[i])) {
+            if (++i == to) {
+                return true;
             }
         }
 
-        if (ch == ':') {
-            if (token != SosiToken.VALUE_NUMBER) {
-                throw unexpectedChar(ch);
+        // frac
+        if (buf[i] == '.') {
+            this.fracOrExp = true;
+            int count = 0;
+            do {
+                if (++i == to) {
+                    return count > 0;
+                }
+                count++;
+            } while (isDigit(buf[i]));
+            if (count == 1) {
+                return false;
             }
-            token = SosiToken.VALUE_COLON;
-            ch = readChar();
         }
 
-        if (!isWhitespace(ch)) {
-            throw unexpectedChar(ch);
+        // exp
+        if (isExpSpecifier(buf[i])) {
+            this.fracOrExp = true;
+            if (++i == to) {
+                return false;
+            }
+            if (isSign(buf[i])) {
+                if (++i == to) {
+                    return false;
+                }
+            }
+            while (isDigit(buf[i])) {
+                if (++i == to) {
+                    return true;
+                }
+            }
         }
 
-        readBegin--;
-        storeEnd = readBegin;
+        return false;
+    }
 
-        if (token == SosiToken.VALUE_COLON) {
-            storeEnd--;
-        }
-        return token;
+    private boolean isDigit(int ch) {
+        return ch >= '0' && ch <= '9';
+    }
+
+    private boolean isSign(int ch) {
+        return ch == '-' || ch == '+';
+    }
+
+    private boolean isExpSpecifier(int ch) {
+        return ch == 'e' || ch == 'E' || ch == 'd' || ch == 'D';
     }
 
     private boolean isWhitespace(int ch) {
@@ -308,7 +339,7 @@ public final class SosiTokenizer implements Closeable {
                 case '!':
                     readComment();
                     return lastToken = SosiToken.EXCLAMATION_MARK;
-                case ':':
+                /*case ':':
                 case '0':
                 case '1':
                 case '2':
@@ -321,13 +352,13 @@ public final class SosiTokenizer implements Closeable {
                 case '9':
                 case '-':
                 case '+':
-                    return lastToken = readNumeric(ch);
+                    return lastToken = readStringOrNumber(ch);*/
                 case -1:
                     return lastToken = SosiToken.EOF;
                 default:
-                    //throw unexpectedChar(ch);
-                    readString();
-                    return lastToken = SosiToken.VALUE_STRING;
+                    return lastToken = readStringOrNumber();
+                    //readString();
+                    //return lastToken = SosiToken.VALUE_STRING;
             }
         }
     }

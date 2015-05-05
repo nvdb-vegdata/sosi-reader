@@ -59,16 +59,28 @@ public class SosiParserImplTest {
     }
 
     @Test
-    public void shouldDetectInvalidValues() {
-        final String[] invalidSosis = new String[]{
-                ".HODE ..VERDI 12x3 .SLUTT",
-                ".HODE ..VERDI 123x .SLUTT",
-                ".HODE ..VERDI 123:.SLUTT",
-                ".HODE ..VERDI 123.SLUTT",
-                ".HODE ..VERDI :12.0 .SLUTT"
+    public void shouldDistinguishBetweenStringAndNumber() {
+        final EventValue[] expectedEvents = new EventValue[]{
+                ev(START_HEAD, "HODE"),
+                ev(START_ELEMENT, "VERDI"),
+                ev(VALUE_STRING, "-12.3e45xxx"),
+                ev(VALUE_NUMBER, "-12.3e45"),
+                ev(VALUE_NUMBER, "-12.3e-4"),
+                ev(VALUE_STRING, "-12.3e-"),
+                ev(VALUE_STRING, "-12.3e"),
+                ev(VALUE_NUMBER, "123"),
+                ev(VALUE_STRING, "12x3"),
+                ev(VALUE_STRING, "123x"),
+                ev(VALUE_STRING, "x123"),
+                ev(VALUE_NUMBER, "12.3"),
+                ev(VALUE_STRING, ":x"),
+                ev(VALUE_STRING, ":12.0"),
+                ev(END_ELEMENT),
+                ev(END_HEAD),
+                ev(END)
         };
 
-        assertParsingException(invalidSosis, "Unexpected char");
+        assertEventSequence("valid_varying_strings_and_numbers.sos", expectedEvents);
     }
 
     @Test
