@@ -339,26 +339,10 @@ public final class SosiTokenizer implements Closeable {
                 case '!':
                     readComment();
                     return lastToken = SosiToken.EXCLAMATION_MARK;
-                /*case ':':
-                case '0':
-                case '1':
-                case '2':
-                case '3':
-                case '4':
-                case '5':
-                case '6':
-                case '7':
-                case '8':
-                case '9':
-                case '-':
-                case '+':
-                    return lastToken = readStringOrNumber(ch);*/
                 case -1:
                     return lastToken = SosiToken.EOF;
                 default:
                     return lastToken = readStringOrNumber();
-                    //readString();
-                    //return lastToken = SosiToken.VALUE_STRING;
             }
         }
     }
@@ -472,12 +456,6 @@ public final class SosiTokenizer implements Closeable {
     public void close() throws IOException {
         reader.close();
         bufferPool.recycle(buf);
-    }
-
-    private SosiParsingException unexpectedChar(int ch) {
-        SosiLocation location = getLastCharLocation();
-        return new SosiParsingException(
-                SosiMessages.TOKENIZER_UNEXPECTED_CHAR(ch, location), location);
     }
 
     private SosiParsingException expectedChar(int unexpected, char expected) {

@@ -15,7 +15,7 @@ import no.vegvesen.nvdb.sosi.SosiLocation;
  */
 class SosiRefNumberImpl implements SosiRefNumber {
     private final long num;
-    private SosiLocation location;
+    private final SosiLocation location;
 
     static SosiRefNumber of(long num, SosiLocation location) {
         return new SosiRefNumberImpl(num, location);

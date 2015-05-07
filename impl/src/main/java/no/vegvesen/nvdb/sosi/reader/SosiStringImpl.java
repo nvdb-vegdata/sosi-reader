@@ -15,7 +15,7 @@ import no.vegvesen.nvdb.sosi.SosiLocation;
  */
 class SosiStringImpl implements SosiString {
     private final String value;
-    private SosiLocation location;
+    private final SosiLocation location;
 
     static SosiString of(String value, SosiLocation location) {
         return new SosiStringImpl(value, location);

@@ -62,7 +62,7 @@ public class SosiReaderImpl implements SosiReader {
         while (parser.hasNext()) {
             SosiParser.Event e = parser.next();
             if (e == START_HEAD || e == START_ELEMENT) {
-                SosiElement element = readElement(new SosiElementBuilderImpl(parser.getString(), bufferPool, parser.getLocation()));
+                SosiElement element = readElement(new SosiElementBuilderImpl(parser.getString(), parser.getLocation()));
                 elements.add(element);
             } else if (e == END) {
                 return SosiDocumentImpl.of(elements);
@@ -89,7 +89,7 @@ public class SosiReaderImpl implements SosiReader {
             switch (e) {
                 case START_ELEMENT:
                     String name = parser.getString();
-                    SosiElement subElement = readElement(new SosiElementBuilderImpl(name, bufferPool, parser.getLocation()));
+                    SosiElement subElement = readElement(new SosiElementBuilderImpl(name, parser.getLocation()));
                     builder.addSubElement(name, subElement);
                     break;
                 case VALUE_STRING:

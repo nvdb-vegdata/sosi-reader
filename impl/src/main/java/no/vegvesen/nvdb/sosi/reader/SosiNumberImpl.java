@@ -19,7 +19,7 @@ import static java.util.Objects.isNull;
  * @author Tore Eide Andersen (Kantega AS)
  */
 abstract class SosiNumberImpl implements SosiNumber {
-    private SosiLocation location;
+    private final SosiLocation location;
 
     static SosiNumber of(int num, SosiLocation location) {
         return new SosiIntNumber(num, location);

@@ -25,19 +25,23 @@ public class SosiWriterImplTest {
 
     @Test
     public void shouldWriteSameAsRead() {
-        SosiDocument doc;
-        try (SosiReader reader = Sosi.createReader(getResource("valid_no_comments.sos"))) {
-            doc = reader.read();
-        }
+        String[] files = new String[]{"valid_no_comments.sos", "valid_real_data.sos"};
+        for (String file : files) {
 
-        String sosi;
-        StringWriter stringWriter = new StringWriter();
-        try (SosiWriter writer = Sosi.createWriter(stringWriter, SosiWriterImplTest::valueFormatter)) {
-            writer.write(doc);
-            sosi = stringWriter.getBuffer().toString();
-        }
+            SosiDocument doc;
+            try (SosiReader reader = Sosi.createReader(getResource(file))) {
+                doc = reader.read();
+            }
 
-        assertSame("valid_no_comments.sos", sosi);
+            String sosi;
+            StringWriter stringWriter = new StringWriter();
+            try (SosiWriter writer = Sosi.createWriter(stringWriter, SosiWriterImplTest::valueFormatter)) {
+                writer.write(doc);
+                sosi = stringWriter.getBuffer().toString();
+            }
+
+            assertSame(file, sosi);
+        }
     }
 
     private void assertSame(String expectedSosiResource, String actualSosi) {
@@ -46,7 +50,7 @@ public class SosiWriterImplTest {
     }
 
     private static String valueFormatter(SosiElement element, SosiValue value) {
-        if (asList("TEGNSETT", "OBJTYPE").contains(element.getName())) {
+        if (asList("TEGNSETT", "OBJTYPE", "VERT-DATUM").contains(element.getName())) {
             return value.getString();
         } else if ("PTEMA".equalsIgnoreCase(element.getName())) {
             return String.format("%04d", ((SosiNumber) value).intValue());

@@ -14,7 +14,7 @@ import no.vegvesen.nvdb.sosi.SosiLocation;
  * @author Tore Eide Andersen (Kantega AS)
  */
 class SosiSerialNumberImpl implements SosiSerialNumber {
-    private static SosiLocation location;
+    private final SosiLocation location;
     private final long num;
 
     static SosiSerialNumber of(long num, SosiLocation location) {

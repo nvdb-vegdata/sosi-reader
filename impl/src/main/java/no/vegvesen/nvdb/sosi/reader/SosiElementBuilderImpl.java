@@ -35,11 +35,9 @@ class SosiElementBuilderImpl implements SosiElementBuilder {
     private SosiLocation location;
     private List<SosiElement> subElements;
     private List<SosiValue> values;
-    private final BufferPool bufferPool;
 
-    SosiElementBuilderImpl(String name, BufferPool bufferPool, SosiLocation location) {
+    SosiElementBuilderImpl(String name, SosiLocation location) {
         this.name = name;
-        this.bufferPool = bufferPool;
         this.location = location;
     }
 
@@ -116,7 +114,7 @@ class SosiElementBuilderImpl implements SosiElementBuilder {
                 ? Collections.<SosiValue>emptyList()
                 : Collections.unmodifiableList(values);
         values = null;
-        return new SosiElementImpl(name, location, snapshotValues, snapshotSubElements, bufferPool);
+        return new SosiElementImpl(name, location, snapshotValues, snapshotSubElements);
     }
 
     private void putValue(SosiValue value) {
@@ -138,7 +136,7 @@ class SosiElementBuilderImpl implements SosiElementBuilder {
             throw new IllegalArgumentException("Concatenation supported for SosiString values only");
         }
 
-        SosiValue newValue = SosiStringImpl.of(((SosiStringImpl) lastValue).getString() + ((SosiStringImpl) value).getString(), lastValue.getLocation());
+        SosiValue newValue = SosiStringImpl.of(lastValue.getString() + value.getString(), lastValue.getLocation());
         values.set(values.size() - 1, newValue);
     }
 
@@ -163,17 +161,15 @@ class SosiElementBuilderImpl implements SosiElementBuilder {
 
     private static final class SosiElementImpl implements SosiElement {
         private final String name;
-        private SosiLocation location;
+        private final SosiLocation location;
         private final List<SosiElement> subElements;
         private List<SosiValue> values;
-        private final BufferPool bufferPool;
 
-        SosiElementImpl(String name, SosiLocation location, List<SosiValue> values, List<SosiElement> subElements, BufferPool bufferPool) {
+        SosiElementImpl(String name, SosiLocation location, List<SosiValue> values, List<SosiElement> subElements) {
             this.name = name;
             this.location = location;
             this.values = values;
             this.subElements = subElements;
-            this.bufferPool = bufferPool;
         }
 
         @Override
