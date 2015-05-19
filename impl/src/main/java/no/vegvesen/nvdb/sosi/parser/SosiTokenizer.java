@@ -416,7 +416,7 @@ public final class SosiTokenizer implements Closeable {
     }
 
     String getValue() {
-        return new String(buf, storeBegin, storeEnd-storeBegin);
+        return new String(buf, storeBegin, storeEnd - storeBegin);
     }
 
     BigDecimal getBigDecimal() {

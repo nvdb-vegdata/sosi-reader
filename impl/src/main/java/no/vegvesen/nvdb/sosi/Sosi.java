@@ -18,6 +18,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
+import java.nio.charset.Charset;
 
 /**
  * Factory to create {@link no.vegvesen.nvdb.sosi.parser.SosiParser} and {@link SosiReader} instances.
@@ -110,8 +111,9 @@ public class Sosi {
      * specified byte stream.
      *
      * @param out i/o stream to which SOSI is written
+     * @param encoding the desired character encoding
      */
-    public static SosiWriter createWriter(OutputStream out) {
-        return new SosiWriterImpl(out);
+    public static SosiWriter createWriter(OutputStream out, Charset encoding) {
+        return new SosiWriterImpl(out, encoding);
     }
 }

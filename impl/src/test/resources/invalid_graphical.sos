@@ -1,15 +1,15 @@
 .HODE
 ..TEGNSETT ISO8859-1
 ..SOSI-VERSJON 8.1
-..SOSI-NIVÃ… 1 !!!!!!!!!!!
+..SOSI-NIVÅ 1 !!!!!!!!!!!
 ..TRANSPAR
 ...KOORDSYS 22
-...ORIGO-NÃ˜  7034310 569351
+...ORIGO-NØ  7034310 569351
 ...ENHET 0.010
-..OMRÃ…DE
-...MIN-NÃ˜ 7034310 569351 !!!!!!!!!!!!!!!!!!!!
-...MAX-NÃ˜ 7034406 569492 !!!!!!!!!!!!!!!!!!!!
-..EIER "SÃ¸bstad AS"
+..OMRÅDE
+...MIN-NØ 7034310 569351 !!!!!!!!!!!!!!!!!!!!
+...MAX-NØ 7034406 569492 !!!!!!!!!!!!!!!!!!!!
+..EIER "Søbstad AS"
 ..PRODUSEN 'Sindre Barland'
 .PUNKT 1:
 ..OBJTYPE Skiltplate_96
@@ -18,11 +18,11 @@
 ..KVALITET 96 5 0 96 5
 ..SkiltnummerHB-050_5530 7691
 ..Ansiktsside_1894 2714
-..StÃ¸rrelse_1970 4132
+..Størrelse_1970 4132
 ..Skiltform_1892 2855
 ..Belysning_1879 3476
 ..Folieklasse_1921 2849
 ..Klappskilt_8828 11739
-..NÃ˜H
+..NØH
 2980 11668 995
 .SLUTT

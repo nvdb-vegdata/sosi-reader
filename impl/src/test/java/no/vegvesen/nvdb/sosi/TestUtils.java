@@ -13,7 +13,7 @@ import java.io.InputStreamReader;
 import static java.util.Objects.isNull;
 
 /**
- * TODO: Purpose and responsibility
+ * Utility functions for unit tests.
  *
  * @author Tore Eide Andersen (Kantega AS)
  */

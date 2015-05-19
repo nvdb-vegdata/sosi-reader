@@ -3,9 +3,13 @@ package no.vegvesen.nvdb.sosi.parser;
 import no.vegvesen.nvdb.sosi.Sosi;
 import org.junit.Test;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
+import java.nio.ByteBuffer;
+import java.util.HashMap;
+import java.util.Map;
 
 import static java.util.Objects.nonNull;
 import static no.vegvesen.nvdb.sosi.TestUtils.getResource;
@@ -27,6 +31,11 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.*;
 
+/**
+ * Unit test for the SosiParserImpl class.
+ *
+ * @author Tore Eide Andersen (Kantega AS)
+ */
 public class SosiParserImplTest {
 
     @Test
@@ -258,6 +267,48 @@ public class SosiParserImplTest {
         assertEventSequence("valid_graphical.sos", expectedEvents);
     }
 
+    @Test
+    public void shouldDetectEncoding() {
+        Map<String,byte[]> encodings = new HashMap<>();
+        encodings.put("ANSI", asByteArray(198, 216, 197, 230, 248, 229));
+        encodings.put("ISO8859-1", asByteArray(198, 216, 197, 230, 248, 229));
+        encodings.put("DOSN8", asByteArray(146, 157, 143, 145, 155, 134));
+        encodings.put("ND7", asByteArray(91, 92, 93, 123, 124, 125));
+        encodings.put("DECN7", asByteArray(91, 92, 93, 123, 124, 125));
+
+        for (String encoding : encodings.keySet()) {
+            ByteBuffer bytes = ByteBuffer.allocate(100);
+            bytes.put(".HODE ..TEGNSETT ".getBytes());
+            bytes.put(encoding.getBytes());
+            bytes.put(" ..VERDI ".getBytes());
+            bytes.put(encodings.get(encoding));
+            bytes.put(" .SLUTT ".getBytes());
+
+            final EventValue[] expectedEvents = new EventValue[]{
+                    ev(START_HEAD, "HODE"),
+                    ev(START_ELEMENT, "TEGNSETT"),
+                    ev(VALUE_STRING, encoding),
+                    ev(END_ELEMENT),
+                    ev(START_ELEMENT, "VERDI"),
+                    ev(VALUE_STRING, "ÆØÅæøå"),
+                    ev(END_ELEMENT),
+                    ev(END_HEAD),
+                    ev(END)
+            };
+
+            SosiParser parser = Sosi.createParser(new ByteArrayInputStream(bytes.array()));
+            assertEventSequenceFromParser(expectedEvents, parser);
+        }
+    }
+
+    private byte[] asByteArray(int... values) {
+        byte[] bytes = new byte[values.length];
+        for (int i = 0; i < values.length; i++) {
+            bytes[i] = (byte)values[i];
+        }
+        return bytes;
+    }
+
     private void assertParsingException(String[] invalidSosis, String expectedMessage) {
         for (String sosi : invalidSosis) {
             try {
@@ -278,6 +329,10 @@ public class SosiParserImplTest {
         InputStream sosiStream = getResource(filename);
         SosiParser parser = Sosi.createParser(sosiStream);
 
+        assertEventSequenceFromParser(expectedEvents, parser);
+    }
+
+    private void assertEventSequenceFromParser(EventValue[] expectedEvents, SosiParser parser) {
         int eventNo = 1;
         for (EventValue expected : expectedEvents) {
             Event event = parser.next();

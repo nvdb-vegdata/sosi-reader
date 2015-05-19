@@ -5,6 +5,7 @@
 // ALL RIGHTS RESERVED
 package no.vegvesen.nvdb.sosi.document;
 
+import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -15,6 +16,8 @@ import java.util.stream.Stream;
  * @author Tore Eide Andersen (Kantega AS)
  */
 public interface SosiDocument {
+
+    Charset getEncoding();
 
     SosiElement getHead();
 

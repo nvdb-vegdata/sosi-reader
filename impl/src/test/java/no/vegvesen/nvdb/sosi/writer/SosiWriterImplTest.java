@@ -8,7 +8,9 @@ import no.vegvesen.nvdb.sosi.document.SosiValue;
 import no.vegvesen.nvdb.sosi.reader.SosiReader;
 import org.junit.Test;
 
-import java.io.StringWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 
 import static java.util.Arrays.asList;
 import static no.vegvesen.nvdb.sosi.TestUtils.getResource;
@@ -17,7 +19,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
 
 /**
- * TODO: Purpose and responsibility
+ * Unit test for the SosiWriterImpl class.
  *
  * @author Tore Eide Andersen (Kantega AS)
  */
@@ -33,13 +35,13 @@ public class SosiWriterImplTest {
                 doc = reader.read();
             }
 
-            String sosi;
-            StringWriter stringWriter = new StringWriter();
-            try (SosiWriter writer = Sosi.createWriter(stringWriter, SosiWriterImplTest::valueFormatter)) {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            Writer streamWriter = new OutputStreamWriter(outputStream, doc.getEncoding());
+            try (SosiWriter writer = Sosi.createWriter(streamWriter, SosiWriterImplTest::valueFormatter)) {
                 writer.write(doc);
-                sosi = stringWriter.getBuffer().toString();
             }
 
+            String sosi = new String(outputStream.toByteArray());
             assertSame(file, sosi);
         }
     }

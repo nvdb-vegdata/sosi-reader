@@ -7,7 +7,9 @@ package no.vegvesen.nvdb.sosi.reader;
 
 import no.vegvesen.nvdb.sosi.document.SosiDocument;
 import no.vegvesen.nvdb.sosi.document.SosiElement;
+import no.vegvesen.nvdb.sosi.document.SosiString;
 
+import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -22,8 +24,10 @@ import java.util.stream.Stream;
  * @author Tore Eide Andersen (Kantega AS)
  */
 class SosiDocumentImpl implements SosiDocument {
-
     private static final String ELEMENT_HEAD = "HODE";
+    private static final String ELEMENT_CHARSET = "TEGNSETT";
+    private static final String DEFAULT_ENCODING = "ISO-8859-1";
+
     private List<SosiElement> elements;
 
     static SosiDocument of(List<SosiElement> elements) {
@@ -32,6 +36,27 @@ class SosiDocumentImpl implements SosiDocument {
 
     SosiDocumentImpl(List<SosiElement> elements) {
         this.elements = elements;
+    }
+
+    @Override
+    public Charset getEncoding() {
+        String sosiCharset = findElementRecursively(ELEMENT_CHARSET).map(e -> e.getValueAs(SosiString.class).getString()).orElse("");
+        String encoding = DEFAULT_ENCODING;
+
+        switch (sosiCharset.toUpperCase()) {
+            case "ANSI" :
+            case "ISO8859-1" :
+            case "ISO8859-10" :
+                encoding = "ISO-8859-1";
+                break;
+            case "DOSN8" :
+            case "ND7" :
+            case "DECN7" :
+                encoding = sosiCharset;
+                break;
+        }
+
+        return Charset.forName(encoding);
     }
 
     @Override

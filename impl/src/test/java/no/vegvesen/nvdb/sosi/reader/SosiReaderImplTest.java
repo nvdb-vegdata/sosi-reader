@@ -16,7 +16,11 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.junit.Assert.*;
 
-
+/**
+ * Unit test for the SosiReaderImpl class.
+ *
+ * @author Tore Eide Andersen (Kantega AS)
+ */
 public class SosiReaderImplTest {
     @Test
     public void shouldBuildSosiDocument() {

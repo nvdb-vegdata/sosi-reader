@@ -1,16 +1,16 @@
 .HODE
 ..TEGNSETT ISO8859-1
 ..SOSI-VERSJON 8.1
-..SOSI-NIVÃ… 1
+..SOSI-NIVÅ 1
 ..TRANSPAR
 ...KOORDSYS 22
-...ORIGO-NÃ˜ 7034307 569377
+...ORIGO-NØ 7034307 569377
 ...ENHET 0.010
 ...VERT-DATUM NN2000
-..OMRÃ…DE
-...MIN-NÃ˜ 7034307 569377
-...MAX-NÃ˜ 7034417 569490
-..EIER "SÃ¸bstad AS"
+..OMRÅDE
+...MIN-NØ 7034307 569377
+...MAX-NØ 7034417 569490
+..EIER "Søbstad AS"
 ..PRODUSENT "Sindre Barland"
 .PUNKT 1:
 ..OBJTYPE NedsenkaKantstein_10
@@ -19,7 +19,7 @@
 ..KVALITET 96 5 0 96 5
 ..Dybde_1656 0.11
 ..Lengde_1302 2.40
-..NÃ˜H
+..NØH
 666 966 934
 .PUNKT 2:
 ..OBJTYPE NedsenkaKantstein_10
@@ -28,7 +28,7 @@
 ..KVALITET 96 5 0 96 5
 ..Dybde_1656 0.11
 ..Lengde_1302 2.40
-..NÃ˜H
+..NØH
 1795 976 932
 .PUNKT 3:
 ..OBJTYPE NedsenkaKantstein_10
@@ -37,7 +37,7 @@
 ..KVALITET 96 5 0 96 5
 ..Dybde_1656 0.11
 ..Lengde_1302 3.00
-..NÃ˜H
+..NØH
 799 7928 987
 .PUNKT 4:
 ..OBJTYPE NedsenkaKantstein_10
@@ -46,7 +46,7 @@
 ..KVALITET 96 5 0 96 5
 ..Dybde_1656 0.11
 ..Lengde_1302 3.00
-..NÃ˜H
+..NØH
 2331 7818 967
 .PUNKT 5:
 ..OBJTYPE NedsenkaKantstein_10
@@ -55,7 +55,7 @@
 ..KVALITET 96 5 0 96 5
 ..Dybde_1656 0.11
 ..Lengde_1302 3.20
-..NÃ˜H
+..NØH
 2992 8301 960
 .PUNKT 6:
 ..OBJTYPE NedsenkaKantstein_10
@@ -64,7 +64,7 @@
 ..KVALITET 96 5 0 96 5
 ..Dybde_1656 0.11
 ..Lengde_1302 3.20
-..NÃ˜H
+..NØH
 3002 9775 971
 .PUNKT 7:
 ..OBJTYPE NedsenkaKantstein_10
@@ -73,7 +73,7 @@
 ..KVALITET 96 5 0 96 5
 ..Dybde_1656 0.11
 ..Lengde_1302 3.00
-..NÃ˜H
+..NØH
 10874 7718 891
 .PUNKT 8:
 ..OBJTYPE NedsenkaKantstein_10
@@ -82,7 +82,7 @@
 ..KVALITET 96 5 0 96 5
 ..Dybde_1656 0.11
 ..Lengde_1302 3.00
-..NÃ˜H
+..NØH
 11000 9004 889
 .PUNKT 9:
 ..OBJTYPE NedsenkaKantstein_10
@@ -91,7 +91,7 @@
 ..KVALITET 96 5 0 96 5
 ..Dybde_1656 0.11
 ..Lengde_1302 2.50
-..NÃ˜H
+..NØH
 2340 549 941
 .PUNKT 10:
 ..OBJTYPE NedsenkaKantstein_10
@@ -100,7 +100,7 @@
 ..KVALITET 96 5 0 96 5
 ..Dybde_1656 0.11
 ..Lengde_1302 2.50
-..NÃ˜H
+..NØH
 2619 47 929
 .PUNKT 11:
 ..OBJTYPE NedsenkaKantstein_10
@@ -109,7 +109,7 @@
 ..KVALITET 96 5 0 96 5
 ..Dybde_1656 0.11
 ..Lengde_1302 3.25
-..NÃ˜H
+..NØH
 77 8988 995
 .PUNKT 12:
 ..OBJTYPE NedsenkaKantstein_10
@@ -118,7 +118,7 @@
 ..KVALITET 96 5 0 96 5
 ..Dybde_1656 0.11
 ..Lengde_1302 3.25
-..NÃ˜H
+..NØH
 111 10501 980
 .PUNKT 13:
 ..OBJTYPE NedsenkaKantstein_10
@@ -127,7 +127,7 @@
 ..KVALITET 96 5 0 96 5
 ..Dybde_1656 0.11
 ..Lengde_1302 3.50
-..NÃ˜H
+..NØH
 1032 11208 980
 .PUNKT 14:
 ..OBJTYPE NedsenkaKantstein_10
@@ -136,6 +136,6 @@
 ..KVALITET 96 5 0 96 5
 ..Dybde_1656 0.11
 ..Lengde_1302 3.50
-..NÃ˜H
+..NØH
 1751 11126 990
 .SLUTT

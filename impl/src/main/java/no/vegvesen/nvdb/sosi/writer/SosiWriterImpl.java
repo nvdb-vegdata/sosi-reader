@@ -13,10 +13,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-
-import static no.vegvesen.nvdb.sosi.document.SosiValue.ValueType.REF;
-import static no.vegvesen.nvdb.sosi.document.SosiValue.ValueType.SERNO;
-import static no.vegvesen.nvdb.sosi.document.SosiValue.ValueType.STRING;
+import java.nio.charset.Charset;
 
 /**
  * TODO: Purpose and responsibility
@@ -38,8 +35,8 @@ public class SosiWriterImpl implements SosiWriter {
         this.valueFormatter = valueFormatter;
     }
 
-    public SosiWriterImpl(OutputStream stream) {
-        this.writer = new OutputStreamWriter(stream);
+    public SosiWriterImpl(OutputStream stream, Charset encoding) {
+        this.writer = new OutputStreamWriter(stream, encoding);
         this.valueFormatter = new DefaultSosiValueFormatter();
     }
 

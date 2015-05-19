@@ -8,10 +8,8 @@ package no.vegvesen.nvdb.sosi.parser;
 import no.vegvesen.nvdb.sosi.SosiException;
 import no.vegvesen.nvdb.sosi.SosiMessages;
 import no.vegvesen.nvdb.sosi.SosiLocation;
-import no.vegvesen.nvdb.sosi.parser.SosiParser;
-import no.vegvesen.nvdb.sosi.parser.SosiParsingException;
 import no.vegvesen.nvdb.sosi.utils.BufferPool;
-import no.vegvesen.nvdb.sosi.utils.UnicodeDetectingInputStream;
+import no.vegvesen.nvdb.sosi.encoding.CharSetDetectingInputStream;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -58,7 +56,7 @@ public class SosiParserImpl implements SosiParser {
     }
 
     public SosiParserImpl(InputStream in, BufferPool bufferPool) {
-        UnicodeDetectingInputStream uin = new UnicodeDetectingInputStream(in);
+        CharSetDetectingInputStream uin = new CharSetDetectingInputStream(in);
         tokenizer = new SosiTokenizer(new InputStreamReader(uin, uin.getCharset()), bufferPool);
         stateIterator = new StateIterator();
         features = Feature.collectDefaults();
@@ -74,11 +72,12 @@ public class SosiParserImpl implements SosiParser {
     public String getString() {
         if (currentEvent.isOneOf(Event.START_HEAD, Event.START_ELEMENT, Event.VALUE_STRING, Event.VALUE_NUMBER, Event.VALUE_SERNO, Event.VALUE_REF, Event.COMMENT)) {
             String value = tokenizer.getValue();
+
             if (currentEvent == Event.VALUE_STRING) {
-                return value.replace("\"\"", "\"").replace("''", "'");
-            } else {
-                return value;
+                value = value.replace("\"\"", "\"").replace("''", "'");
             }
+
+            return value;
         }
         throw new IllegalStateException(
                 SosiMessages.PARSER_GETSTRING_ERR(currentEvent));
