@@ -17,7 +17,7 @@ import java.nio.charset.Charset;
  *
  * @author Tore Eide Andersen (Kantega AS)
  */
-public class Charset_DetectingInputStream extends FilterInputStream {
+public class CharsetDetectingInputStream extends FilterInputStream {
     private static final int BUF_SIZE = 1024;
 
     private final byte[] buf = new byte[BUF_SIZE];
@@ -25,7 +25,7 @@ public class Charset_DetectingInputStream extends FilterInputStream {
     private int curIndex = 0;
     private final Charset charset;
 
-    public Charset_DetectingInputStream(InputStream is) {
+    public CharsetDetectingInputStream(InputStream is) {
         super(is);
         charset = detectEncoding();
     }

@@ -9,7 +9,7 @@ import no.vegvesen.nvdb.sosi.SosiException;
 import no.vegvesen.nvdb.sosi.SosiMessages;
 import no.vegvesen.nvdb.sosi.SosiLocation;
 import no.vegvesen.nvdb.sosi.utils.BufferPool;
-import no.vegvesen.nvdb.sosi.encoding.Charset_DetectingInputStream;
+import no.vegvesen.nvdb.sosi.encoding.CharsetDetectingInputStream;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -56,7 +56,7 @@ public class SosiParserImpl implements SosiParser {
     }
 
     public SosiParserImpl(InputStream in, BufferPool bufferPool) {
-        Charset_DetectingInputStream uin = new Charset_DetectingInputStream(in);
+        CharsetDetectingInputStream uin = new CharsetDetectingInputStream(in);
         tokenizer = new SosiTokenizer(new InputStreamReader(uin, uin.getCharset()), bufferPool);
         stateIterator = new StateIterator();
         features = Feature.collectDefaults();
