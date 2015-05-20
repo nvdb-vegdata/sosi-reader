@@ -5,6 +5,7 @@
 // ALL RIGHTS RESERVED
 package no.vegvesen.nvdb.sosi;
 
+import no.vegvesen.nvdb.sosi.encoding.EncodingDetector;
 import no.vegvesen.nvdb.sosi.reader.SosiReader;
 import no.vegvesen.nvdb.sosi.reader.SosiReaderImpl;
 import no.vegvesen.nvdb.sosi.utils.BufferPoolImpl;
@@ -42,6 +43,16 @@ import java.nio.charset.Charset;
 public class Sosi {
 
     private Sosi() {
+    }
+
+    /**
+     * Detects the encoding of a SOSI file.
+     *
+     * @param sosi the SOSI file content.
+     * @return the encoding
+     */
+    public static Charset getEncoding(byte[] sosi) {
+        return EncodingDetector.charsetOf(sosi);
     }
 
     /**

@@ -11,16 +11,13 @@ import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
-import java.util.function.Predicate;
 
 /**
  * A filter stream that detects the encoding of the original stream.
  *
  * @author Tore Eide Andersen (Kantega AS)
  */
-public class CharSetDetectingInputStream extends FilterInputStream {
-    private static final String CHARSET_ELEMENT = "TEGNSETT";
-    private static final String DEFAULT_CHARSET = "ISO-8859-1";
+public class Charset_DetectingInputStream extends FilterInputStream {
     private static final int BUF_SIZE = 1024;
 
     private final byte[] buf = new byte[BUF_SIZE];
@@ -28,13 +25,18 @@ public class CharSetDetectingInputStream extends FilterInputStream {
     private int curIndex = 0;
     private final Charset charset;
 
-    public CharSetDetectingInputStream(InputStream is) {
+    public Charset_DetectingInputStream(InputStream is) {
         super(is);
         charset = detectEncoding();
     }
 
     public Charset getCharset() {
         return charset;
+    }
+
+    private Charset detectEncoding() {
+        fillBuf();
+        return EncodingDetector.charsetOf(buf);
     }
 
     private void fillBuf() {
@@ -51,64 +53,6 @@ public class CharSetDetectingInputStream extends FilterInputStream {
         } catch (IOException e) {
             throw new SosiException("I/O error while auto-detecting the encoding of stream", e);
         }
-    }
-
-    private Charset detectEncoding() {
-        fillBuf();
-
-        int pos = indexOf(CHARSET_ELEMENT.getBytes());
-        if (pos > -1) {
-            pos += CHARSET_ELEMENT.length() + 1;
-            pos = advanceBufPos(pos, isWhitespace());
-            int endPos = advanceBufPos(pos, isWhitespace().negate());
-
-            if (pos < bufLen) {
-                String charsetName = charsetNameFromSosiValue(new String(buf, pos, endPos - pos));
-                return Charset.forName(charsetName);
-            }
-        }
-
-        return Charset.forName(DEFAULT_CHARSET);
-    }
-
-    private String charsetNameFromSosiValue(String sosiCharset) {
-        switch (sosiCharset.toUpperCase()) {
-            case "ANSI" :
-            case "ISO8859-1" :
-            case "ISO8859-10" :
-                return "ISO-8859-1";
-            case "DOSN8" :
-            case "ND7" :
-            case "DECN7" :
-                return sosiCharset;
-        }
-
-        return DEFAULT_CHARSET;
-    }
-
-    private int advanceBufPos(int pos, Predicate<Byte> pred) {
-        while (pos < bufLen && pred.test(buf[pos])) {
-            pos++;
-        }
-        return pos;
-    }
-
-    private Predicate<Byte> isWhitespace() {
-        return ch -> ch == 0x20 || ch == 0x09 || ch == 0x0a || ch == 0x0d;
-    }
-
-    private int indexOf(byte[] subBuf) {
-        for (int i = 0; i < bufLen; i += subBuf.length) {
-            for (int j = subBuf.length - 1; j >= 0; j--) {
-                if (buf[i+j] != subBuf[j]) {
-                    break;
-                } else if (j == 0) {
-                    return i;
-                }
-            }
-        }
-
-        return -1;
     }
 
     @Override
