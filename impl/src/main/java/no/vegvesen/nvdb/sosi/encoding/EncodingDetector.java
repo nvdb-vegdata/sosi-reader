@@ -14,7 +14,7 @@ import java.util.function.Predicate;
  * @author Tore Eide Andersen (Kantega AS)
  */
 public class EncodingDetector {
-    private static final String CHARSET_ELEMENT = "TEGNSETT";
+    private static final String CHARSET_ELEMENT = "..TEGNSETT";
     private static final String DEFAULT_CHARSET = "ISO-8859-1";
 
     private byte[] buf;
@@ -72,11 +72,11 @@ public class EncodingDetector {
     }
 
     private int indexOf(byte[] subBuf) {
-        for (int i = 0; i < buf.length; i += subBuf.length) {
-            for (int j = subBuf.length - 1; j >= 0; j--) {
+        for (int i = 0; i < buf.length; i++) {
+            for (int j = 0; j < subBuf.length && i+j < buf.length; j++) {
                 if (buf[i+j] != subBuf[j]) {
                     break;
-                } else if (j == 0) {
+                } else if (j == subBuf.length - 1) {
                     return i;
                 }
             }
