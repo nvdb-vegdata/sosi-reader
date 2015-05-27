@@ -285,7 +285,13 @@ public interface SosiParser extends /*Auto*/Closeable {
          * Feature that determines whether parser will allow elements
          * with no subelements and no values.
          */
-        ALLOW_EMPTY_ELEMENTS(false);
+        ALLOW_EMPTY_ELEMENTS(false),
+
+        /**
+         * Feature that determines whether parser will allow missing or
+         * invalid TEGNSETT element/value.
+         */
+        ALLOW_MISSING_OR_INVALID_CHARSET(true);
 
         /**
          * Whether feature is enabled or disabled by default.

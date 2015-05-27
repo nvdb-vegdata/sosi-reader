@@ -16,6 +16,8 @@ import java.nio.charset.CoderResult;
 /**
  * Generic charset decoder for SOSI input stream readers.
  *
+ * Based on the Java ISO-8859-1 charset decoder class.
+ *
  * @author Tore Eide Andersen (Kantega AS)
  */
 abstract class SosiCharsetDecoder extends CharsetDecoder implements ArrayDecoder {

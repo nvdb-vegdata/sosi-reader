@@ -16,7 +16,7 @@ import java.io.Writer;
 import java.nio.charset.Charset;
 
 /**
- * TODO: Purpose and responsibility
+ * Implements a SOSI writer
  *
  * @author Tore Eide Andersen (Kantega AS)
  */

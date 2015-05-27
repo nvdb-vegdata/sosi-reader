@@ -79,6 +79,10 @@ public final class SosiMessages {
         return localize("parser.grammar.headMustBeFirst");
     }
 
+    public static String PARSER_MISSING_OR_INVALID_CHARSET() {
+        return localize("parser.grammar.missingOrInvalidCharset");
+    }
+
     public static String PARSER_INVALID_CONCATENATION() {
         return localize("parser.grammar.invalidConcatenation");
     }
@@ -89,36 +93,6 @@ public final class SosiMessages {
 
     public static String PARSER_LEVEL_LEAP() {
         return localize("parser.grammar.levelLeap");
-    }
-
-
-    // generator messages
-    public static String GENERATOR_FLUSH_IO_ERR() {
-        return localize("generator.flush.io.err");
-    }
-
-    public static String GENERATOR_CLOSE_IO_ERR() {
-        return localize("generator.close.io.err");
-    }
-
-    public static String GENERATOR_WRITE_IO_ERR() {
-        return localize("generator.write.io.err");
-    }
-
-    public static String GENERATOR_ILLEGAL_METHOD(Object scope) {
-        return localize("generator.illegal.method", scope);
-    }
-
-    public static String GENERATOR_DOUBLE_INFINITE_NAN() {
-        return localize("generator.double.infinite.nan");
-    }
-
-    public static String GENERATOR_INCOMPLETE_JSON() {
-        return localize("generator.incomplete.sosi");
-    }
-
-    public static String GENERATOR_ILLEGAL_MULTIPLE_TEXT() {
-        return localize("generator.illegal.multiple.text");
     }
 
     // writer messages

@@ -8,6 +8,7 @@ package no.vegvesen.nvdb.sosi.parser;
 import no.vegvesen.nvdb.sosi.SosiException;
 import no.vegvesen.nvdb.sosi.SosiMessages;
 import no.vegvesen.nvdb.sosi.SosiLocation;
+import no.vegvesen.nvdb.sosi.encoding.EncodingDetector;
 import no.vegvesen.nvdb.sosi.utils.BufferPool;
 import no.vegvesen.nvdb.sosi.encoding.CharsetDetectingInputStream;
 
@@ -19,6 +20,7 @@ import java.math.BigDecimal;
 import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import static java.util.Objects.isNull;
 import static no.vegvesen.nvdb.sosi.parser.SosiTokenizer.SosiToken;
@@ -32,14 +34,15 @@ import static no.vegvesen.nvdb.sosi.parser.SosiTokenizer.SosiToken;
  */
 public class SosiParserImpl implements SosiParser {
 
-    public static final String ELEMENT_HEAD = "HODE";
-    public static final String ELEMENT_END = "SLUTT";
+    private static final String ELEMENT_HEAD = "HODE";
+    private static final String ELEMENT_END = "SLUTT";
 
     private Context currentContext = new NoneContext();
     private Event previousEvent;
     private Event currentEvent;
     private int currentLevel = 0;
     private int levelsToClose = 0;
+    private boolean missingOrInvalidCharset = false;
     private boolean headFound = false;
     private boolean endFound = false;
 
@@ -56,14 +59,18 @@ public class SosiParserImpl implements SosiParser {
     }
 
     public SosiParserImpl(InputStream in, BufferPool bufferPool) {
-        CharsetDetectingInputStream uin = new CharsetDetectingInputStream(in);
-        tokenizer = new SosiTokenizer(new InputStreamReader(uin, uin.getCharset()), bufferPool);
+        CharsetDetectingInputStream cdin = new CharsetDetectingInputStream(in);
+        Optional<Charset> maybeEncoding = cdin.getCharset();
+        this.missingOrInvalidCharset = !maybeEncoding.isPresent();
+        tokenizer = new SosiTokenizer(
+                new InputStreamReader(cdin, maybeEncoding.orElse(EncodingDetector.defaultCharset())), bufferPool);
         stateIterator = new StateIterator();
         features = Feature.collectDefaults();
     }
 
     public SosiParserImpl(InputStream in, Charset encoding, BufferPool bufferPool) {
-        tokenizer = new SosiTokenizer(new InputStreamReader(in, encoding), bufferPool);
+        tokenizer = new SosiTokenizer(
+                new InputStreamReader(in, encoding), bufferPool);
         stateIterator = new StateIterator();
         features = Feature.collectDefaults();
     }
@@ -274,6 +281,9 @@ public class SosiParserImpl implements SosiParser {
                     endFound = true;
                     return Event.END;
                 } else if (isHead) {
+                    if (missingOrInvalidCharset && !isEnabled(Feature.ALLOW_MISSING_OR_INVALID_CHARSET)) {
+                        throw parsingException(SosiMessages.PARSER_MISSING_OR_INVALID_CHARSET());
+                    }
                     headFound = true;
                     return Event.START_HEAD;
                 } else {

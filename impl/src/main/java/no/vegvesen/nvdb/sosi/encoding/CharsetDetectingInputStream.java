@@ -11,6 +11,7 @@ import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
+import java.util.Optional;
 
 /**
  * A filter stream that detects the encoding of the original stream.
@@ -23,18 +24,18 @@ public class CharsetDetectingInputStream extends FilterInputStream {
     private final byte[] buf = new byte[BUF_SIZE];
     private int bufLen;
     private int curIndex = 0;
-    private final Charset charset;
+    private final Optional<Charset> charset;
 
     public CharsetDetectingInputStream(InputStream is) {
         super(is);
         charset = detectEncoding();
     }
 
-    public Charset getCharset() {
+    public Optional<Charset> getCharset() {
         return charset;
     }
 
-    private Charset detectEncoding() {
+    private Optional<Charset> detectEncoding() {
         fillBuf();
         return EncodingDetector.charsetOf(buf);
     }
