@@ -19,12 +19,13 @@ import java.util.List;
 public class SosiCharsetProvider extends CharsetProvider {
     private final List<Charset> charsets;
 
+    private static final Charset ISO8859_10 = new ISO8859_10();
     private static final Charset DOSN8 = new DOSN8();
     private static final Charset ND7 = new ND7();
     private static final Charset DECN7 = new DECN7();
 
     public SosiCharsetProvider() {
-        this.charsets = Arrays.asList(DOSN8, ND7, DECN7);
+        this.charsets = Arrays.asList(ISO8859_10, DOSN8, ND7, DECN7);
     }
 
     @Override

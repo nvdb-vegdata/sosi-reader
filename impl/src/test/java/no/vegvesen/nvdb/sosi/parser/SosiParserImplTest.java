@@ -272,6 +272,8 @@ public class SosiParserImplTest {
         Map<String,byte[]> encodings = new HashMap<>();
         encodings.put("ANSI", asByteArray(198, 216, 197, 230, 248, 229));
         encodings.put("ISO8859-1", asByteArray(198, 216, 197, 230, 248, 229));
+        encodings.put("ISO8859-10", asByteArray(198, 216, 197, 230, 248, 229));
+        encodings.put("UTF-8", asDoubleByteArray(0xc386, 0xc398, 0xc385, 0xc3a6, 0xc3b8, 0xc3a5));
         encodings.put("DOSN8", asByteArray(146, 157, 143, 145, 155, 134));
         encodings.put("ND7", asByteArray(91, 92, 93, 123, 124, 125));
         encodings.put("DECN7", asByteArray(91, 92, 93, 123, 124, 125));
@@ -305,6 +307,15 @@ public class SosiParserImplTest {
         byte[] bytes = new byte[values.length];
         for (int i = 0; i < values.length; i++) {
             bytes[i] = (byte)values[i];
+        }
+        return bytes;
+    }
+
+    private byte[] asDoubleByteArray(int... values) {
+        byte[] bytes = new byte[values.length*2];
+        for (int i = 0; i < values.length; i++) {
+            bytes[i*2] = (byte)(values[i] >> 8);
+            bytes[i*2+1] = (byte)(values[i] & 0xff);
         }
         return bytes;
     }

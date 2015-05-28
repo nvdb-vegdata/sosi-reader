@@ -58,10 +58,13 @@ public class EncodingDetector {
 
     public static Optional<String> charsetNameFromSosiValue(String sosiCharset) {
         switch (sosiCharset.toUpperCase()) {
+            case "UTF-8" :
+                return Optional.of("UTF-8");
             case "ANSI" :
             case "ISO8859-1" :
-            case "ISO8859-10" :
                 return Optional.of("ISO-8859-1");
+            case "ISO8859-10" :
+                return Optional.of("ISO-8859-10");
             case "DOSN8" :
             case "ND7" :
             case "DECN7" :

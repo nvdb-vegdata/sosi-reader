@@ -29,7 +29,15 @@ public class EncodingDetectorTest {
         String sosi = ".HODE ..TEGNSETT ISO8859-10";
         Optional<Charset> charset = EncodingDetector.charsetOf(sosi.getBytes());
         assertThat(charset.isPresent(), is(true));
-        assertThat(charset.get().name(), equalTo("ISO-8859-1"));
+        assertThat(charset.get().name(), equalTo("ISO-8859-10"));
+    }
+
+    @Test
+    public void shouldDetectCharsetUTF_8() {
+        String sosi = ".HODE ..TEGNSETT UTF-8";
+        Optional<Charset> charset = EncodingDetector.charsetOf(sosi.getBytes());
+        assertThat(charset.isPresent(), is(true));
+        assertThat(charset.get().name(), equalTo("UTF-8"));
     }
 
     @Test
