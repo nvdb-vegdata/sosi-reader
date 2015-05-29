@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import static java.util.Objects.isNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Implements a SOSI number.
@@ -34,8 +35,6 @@ abstract class SosiNumberImpl implements SosiNumber {
     }
 
     static SosiNumber of(double value, SosiLocation location) {
-        //bigDecimal = new BigDecimal(value);
-        // This is the preferred way to convert double to BigDecimal
         return new SosiBigDecimalNumber(BigDecimal.valueOf(value), location);
     }
 
@@ -44,7 +43,7 @@ abstract class SosiNumberImpl implements SosiNumber {
     }
 
     SosiNumberImpl(SosiLocation location) {
-        this.location = location;
+        this.location = requireNonNull(location, "location can't be null");
     }
 
     // Optimized SosiNumber impl for int numbers.

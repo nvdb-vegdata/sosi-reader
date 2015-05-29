@@ -36,5 +36,7 @@ public interface SosiElement {
 
     <T> List<T> getValuesAs(Class<T> valueClass);
 
-    void transformValues(Function<Stream<SosiValue>, Stream<SosiValue>> transformer);
+    void rename(Function<String, String> transformer);
+
+    void computeValues(Function<Stream<SosiValue>, Stream<SosiValue>> transformer);
 }

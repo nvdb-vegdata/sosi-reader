@@ -8,7 +8,7 @@ package no.vegvesen.nvdb.sosi.reader;
 import no.vegvesen.nvdb.sosi.document.SosiDocument;
 import no.vegvesen.nvdb.sosi.document.SosiElement;
 import no.vegvesen.nvdb.sosi.document.SosiString;
-import no.vegvesen.nvdb.sosi.encoding.EncodingDetector;
+import no.vegvesen.nvdb.sosi.encoding.SosiEncoding;
 
 import java.nio.charset.Charset;
 import java.util.Collection;
@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Stream;
+
+import static java.util.Objects.requireNonNull;
 
 
 /**
@@ -35,15 +37,15 @@ class SosiDocumentImpl implements SosiDocument {
     }
 
     SosiDocumentImpl(List<SosiElement> elements) {
-        this.elements = elements;
+        this.elements = requireNonNull(elements, "elements can't be null");
     }
 
     @Override
     public Charset getEncoding() {
         String sosiCharset = findElementRecursively(ELEMENT_CHARSET).map(e -> e.getValueAs(SosiString.class).getString()).orElse("");
-        return EncodingDetector.charsetNameFromSosiValue(sosiCharset)
+        return SosiEncoding.charsetNameFromSosiValue(sosiCharset)
                 .map(Charset::forName)
-                .orElse(EncodingDetector.defaultCharset());
+                .orElse(SosiEncoding.defaultCharset());
     }
 
     @Override
@@ -66,11 +68,13 @@ class SosiDocumentImpl implements SosiDocument {
 
     @Override
     public Optional<SosiElement> findElement(String name) {
+        requireNonNull(name, "name can't be null");
         return elements().filter(e -> e.getName().equalsIgnoreCase(name)).findFirst();
     }
 
     @Override
     public Optional<SosiElement> findElementRecursively(String name) {
+        requireNonNull(name, "name can't be null");
         Optional<SosiElement> maybeMatch = findElement(name);
         if (maybeMatch.isPresent()) {
             return maybeMatch;

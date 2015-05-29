@@ -37,7 +37,7 @@ public class CharsetDetectingInputStream extends FilterInputStream {
 
     private Optional<Charset> detectEncoding() {
         fillBuf();
-        return EncodingDetector.charsetOf(buf);
+        return SosiEncoding.charsetOf(buf);
     }
 
     private void fillBuf() {

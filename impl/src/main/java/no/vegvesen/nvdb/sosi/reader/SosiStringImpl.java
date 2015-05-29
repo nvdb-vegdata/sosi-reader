@@ -8,6 +8,8 @@ package no.vegvesen.nvdb.sosi.reader;
 import no.vegvesen.nvdb.sosi.document.SosiString;
 import no.vegvesen.nvdb.sosi.SosiLocation;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * Implements a SOSI string value.
  *
@@ -22,8 +24,8 @@ class SosiStringImpl implements SosiString {
     }
 
     SosiStringImpl(String value, SosiLocation location) {
-        this.value = value;
-        this.location = location;
+        this.value = requireNonNull(value, "value can't be null");
+        this.location = requireNonNull(location, "location can't be null");
     }
 
     @Override

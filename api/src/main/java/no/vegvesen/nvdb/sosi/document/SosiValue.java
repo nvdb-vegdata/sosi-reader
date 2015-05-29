@@ -7,6 +7,8 @@ package no.vegvesen.nvdb.sosi.document;
 
 import no.vegvesen.nvdb.sosi.SosiLocation;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * An immutable SOSI value.
  *
@@ -27,6 +29,7 @@ public interface SosiValue {
     String toString();
 
     static SosiValue DEFAULT(SosiLocation location) {
+        requireNonNull(location, "location can't be null");
         return new SosiValue() {
             @Override
             public ValueType getValueType() {
@@ -64,6 +67,7 @@ public interface SosiValue {
     }
 
     static SosiValue UNSPECIFIED(SosiLocation location) {
+        requireNonNull(location, "location can't be null");
         return new SosiValue() {
             @Override
             public ValueType getValueType() {

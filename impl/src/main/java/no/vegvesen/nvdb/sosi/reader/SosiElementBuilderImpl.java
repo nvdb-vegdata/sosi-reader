@@ -9,7 +9,6 @@ import no.vegvesen.nvdb.sosi.SosiMessages;
 import no.vegvesen.nvdb.sosi.document.SosiElement;
 import no.vegvesen.nvdb.sosi.document.SosiValue;
 import no.vegvesen.nvdb.sosi.SosiLocation;
-import no.vegvesen.nvdb.sosi.utils.BufferPool;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -17,13 +16,15 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static java.util.Objects.isNull;
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 /**
  * Implements a SosiElementBuilder
@@ -32,7 +33,7 @@ import static java.util.stream.Collectors.toList;
  */
 class SosiElementBuilderImpl implements SosiElementBuilder {
     private final String name;
-    private SosiLocation location;
+    private final SosiLocation location;
     private List<SosiElement> subElements;
     private List<SosiValue> values;
 
@@ -160,16 +161,16 @@ class SosiElementBuilderImpl implements SosiElementBuilder {
     }
 
     private static final class SosiElementImpl implements SosiElement {
-        private final String name;
+        private String name;
         private final SosiLocation location;
         private final List<SosiElement> subElements;
         private List<SosiValue> values;
 
         SosiElementImpl(String name, SosiLocation location, List<SosiValue> values, List<SosiElement> subElements) {
-            this.name = name;
-            this.location = location;
-            this.values = values;
-            this.subElements = subElements;
+            this.name = requireNonNull(name, "name can't be null");
+            this.location = requireNonNull(location, "location can't be null");
+            this.values = requireNonNull(values, "values can't be null");
+            this.subElements = requireNonNull(subElements, "subElements can't be null");
         }
 
         @Override
@@ -184,11 +185,13 @@ class SosiElementBuilderImpl implements SosiElementBuilder {
 
         @Override
         public Optional<SosiElement> findSubElement(String name) {
+            requireNonNull(name, "name can't be null");
             return subElements().filter(e -> e.getName().equalsIgnoreCase(name)).findFirst();
         }
 
         @Override
         public Optional<SosiElement> findSubElementRecursively(String name) {
+            requireNonNull(name, "name can't be null");
             Optional<SosiElement> maybeMatch = findSubElement(name);
             if (maybeMatch.isPresent()) {
                 return maybeMatch;
@@ -205,8 +208,8 @@ class SosiElementBuilderImpl implements SosiElementBuilder {
 
         @Override
         public List<SosiElement> findSubElements(String... names) {
-            Objects.requireNonNull(names, "No names specified");
-            List<String> namesToFind = Arrays.stream(names).map(String::toUpperCase).collect(toList());
+            requireNonNull(names, "No names specified");
+            Set<String> namesToFind = Arrays.stream(names).map(String::toUpperCase).collect(toSet());
             return subElements().filter(e -> namesToFind.contains(e.getName().toUpperCase())).collect(toList());
         }
 
@@ -222,6 +225,7 @@ class SosiElementBuilderImpl implements SosiElementBuilder {
 
         @Override
         public <T> T getValueAs(Class<T> valueClass) {
+            requireNonNull(valueClass, "valueClass can't be null");
             Optional<SosiValue> maybeValue = values().findFirst();
             if (!maybeValue.isPresent()) {
                 throw new IllegalStateException("No values for this element");
@@ -231,11 +235,19 @@ class SosiElementBuilderImpl implements SosiElementBuilder {
 
         @Override
         public <T> List<T> getValuesAs(Class<T> valueClass) {
+            requireNonNull(valueClass, "valueClass can't be null");
             return values().map(valueClass::cast).collect(toList());
         }
 
         @Override
-        public void transformValues(Function<Stream<SosiValue>, Stream<SosiValue>> transformer) {
+        public void rename(Function<String, String> transformer) {
+            requireNonNull(transformer, "transformer can't be null");
+            this.name = transformer.apply(name);
+        }
+
+        @Override
+        public void computeValues(Function<Stream<SosiValue>, Stream<SosiValue>> transformer) {
+            requireNonNull(transformer, "transformer can't be null");
             this.values = transformer.apply(values()).collect(toList());
         }
 

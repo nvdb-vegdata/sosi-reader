@@ -5,7 +5,7 @@
 // ALL RIGHTS RESERVED
 package no.vegvesen.nvdb.sosi;
 
-import no.vegvesen.nvdb.sosi.encoding.EncodingDetector;
+import no.vegvesen.nvdb.sosi.encoding.SosiEncoding;
 import no.vegvesen.nvdb.sosi.reader.SosiReader;
 import no.vegvesen.nvdb.sosi.reader.SosiReaderImpl;
 import no.vegvesen.nvdb.sosi.utils.BufferPoolImpl;
@@ -52,7 +52,7 @@ public class Sosi {
      * @return the encoding
      */
     public static Charset getEncoding(byte[] sosi) {
-        return EncodingDetector.charsetOf(sosi).orElse(EncodingDetector.defaultCharset());
+        return SosiEncoding.charsetOf(sosi).orElse(SosiEncoding.defaultCharset());
     }
 
     /**
