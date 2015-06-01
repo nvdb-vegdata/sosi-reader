@@ -23,7 +23,6 @@ public abstract class SosiCharset extends Charset {
     /**
      * Charset.forName uses the system class loader to load custom charset providers.
      * This won't always work in the context of web applications.
-     * Use this method is fail safe in all contexts.
      */
     public static Charset forName(String charsetName) {
         SosiCharsetProvider provider = new SosiCharsetProvider();
