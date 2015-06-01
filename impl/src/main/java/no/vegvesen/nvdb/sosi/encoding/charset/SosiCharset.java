@@ -3,7 +3,9 @@
 // express written consent of Statens vegvesen is strictly prohibited.
 // Copyright © 2015 Statens vegvesen
 // ALL RIGHTS RESERVED
-package no.vegvesen.nvdb.sosi.encoding;
+package no.vegvesen.nvdb.sosi.encoding.charset;
+
+import no.vegvesen.nvdb.sosi.encoding.SosiCharsetProvider;
 
 import java.nio.charset.Charset;
 

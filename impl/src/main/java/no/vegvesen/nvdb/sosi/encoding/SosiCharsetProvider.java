@@ -5,6 +5,11 @@
 // ALL RIGHTS RESERVED
 package no.vegvesen.nvdb.sosi.encoding;
 
+import no.vegvesen.nvdb.sosi.encoding.charset.DECN7;
+import no.vegvesen.nvdb.sosi.encoding.charset.DOSN8;
+import no.vegvesen.nvdb.sosi.encoding.charset.ISO8859_10;
+import no.vegvesen.nvdb.sosi.encoding.charset.ND7;
+
 import java.nio.charset.Charset;
 import java.nio.charset.spi.CharsetProvider;
 import java.util.Arrays;

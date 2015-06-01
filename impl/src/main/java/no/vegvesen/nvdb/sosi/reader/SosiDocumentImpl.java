@@ -8,7 +8,7 @@ package no.vegvesen.nvdb.sosi.reader;
 import no.vegvesen.nvdb.sosi.document.SosiDocument;
 import no.vegvesen.nvdb.sosi.document.SosiElement;
 import no.vegvesen.nvdb.sosi.document.SosiString;
-import no.vegvesen.nvdb.sosi.encoding.SosiCharset;
+import no.vegvesen.nvdb.sosi.encoding.charset.SosiCharset;
 import no.vegvesen.nvdb.sosi.encoding.SosiEncoding;
 
 import java.nio.charset.Charset;

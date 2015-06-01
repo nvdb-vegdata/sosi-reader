@@ -5,6 +5,7 @@
 // ALL RIGHTS RESERVED
 package no.vegvesen.nvdb.sosi.encoding;
 
+import no.vegvesen.nvdb.sosi.encoding.charset.SosiCharset;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
