@@ -8,6 +8,7 @@ package no.vegvesen.nvdb.sosi.reader;
 import no.vegvesen.nvdb.sosi.document.SosiDocument;
 import no.vegvesen.nvdb.sosi.document.SosiElement;
 import no.vegvesen.nvdb.sosi.document.SosiString;
+import no.vegvesen.nvdb.sosi.encoding.SosiCharset;
 import no.vegvesen.nvdb.sosi.encoding.SosiEncoding;
 
 import java.nio.charset.Charset;
@@ -44,7 +45,7 @@ class SosiDocumentImpl implements SosiDocument {
     public Charset getEncoding() {
         String sosiCharset = findElementRecursively(ELEMENT_CHARSET).map(e -> e.getValueAs(SosiString.class).getString()).orElse("");
         return SosiEncoding.charsetNameFromSosiValue(sosiCharset)
-                .map(Charset::forName)
+                .map(SosiCharset::forName)
                 .orElse(SosiEncoding.defaultCharset());
     }
 

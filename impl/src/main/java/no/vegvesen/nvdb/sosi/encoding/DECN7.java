@@ -16,7 +16,7 @@ import java.nio.charset.CharsetEncoder;
  *
  * @author Tore Eide Andersen (Kantega AS)
  */
-public class DECN7 extends Charset {
+public class DECN7 extends SosiCharset {
 
     private final static BiMap<Byte, Character> charMap;
 
@@ -31,7 +31,7 @@ public class DECN7 extends Charset {
     }
 
     public DECN7() {
-        super("DECN7", null);
+        super("DECN7");
     }
 
     public boolean contains(Charset cs) {

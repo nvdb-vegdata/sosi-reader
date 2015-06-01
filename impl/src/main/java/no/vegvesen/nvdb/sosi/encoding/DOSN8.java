@@ -16,7 +16,7 @@ import java.nio.charset.CharsetEncoder;
  *
  * @author Tore Eide Andersen (Kantega AS)
  */
-public class DOSN8 extends Charset {
+public class DOSN8 extends SosiCharset {
 
     private final static BiMap<Byte, Character> charMap;
 
@@ -31,7 +31,7 @@ public class DOSN8 extends Charset {
     }
 
     public DOSN8() {
-        super("DOSN8", null);
+        super("DOSN8");
     }
 
     public boolean contains(Charset cs) {

@@ -16,7 +16,7 @@ import java.nio.charset.CharsetEncoder;
  *
  * @author Tore Eide Andersen (Kantega AS)
  */
-public class ND7 extends Charset {
+public class ND7 extends SosiCharset {
 
     private final static BiMap<Byte, Character> charMap;
 
@@ -31,7 +31,7 @@ public class ND7 extends Charset {
     }
 
     public ND7() {
-        super("ND7", null);
+        super("ND7");
     }
 
     public boolean contains(Charset cs) {

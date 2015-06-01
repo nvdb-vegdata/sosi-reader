@@ -26,12 +26,12 @@ public class SosiEncoding {
 
     public static Optional<Charset> charsetOf(byte[] sosi) {
         Detector detector = new Detector(sosi);
-        return detector.getCharsetName().map(Charset::forName);
+        return detector.getCharsetName().map(SosiCharset::forName);
     }
 
     public static Charset defaultCharset() {
         LOGGER.warn("Using default charset: {}", DEFAULT_CHARSET);
-        return Charset.forName(DEFAULT_CHARSET);
+        return SosiCharset.forName(DEFAULT_CHARSET);
     }
 
     public static Optional<String> charsetNameFromSosiValue(String sosiCharset) {

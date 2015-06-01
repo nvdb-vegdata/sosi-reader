@@ -16,7 +16,7 @@ import java.nio.charset.CharsetEncoder;
  *
  * @author Tore Eide Andersen (Kantega AS)
  */
-public class ISO8859_10 extends Charset {
+public class ISO8859_10 extends SosiCharset {
 
     private final static BiMap<Byte, Character> charMap;
 
@@ -52,7 +52,7 @@ public class ISO8859_10 extends Charset {
     }
 
     public ISO8859_10() {
-        super("ISO-8859-10", null);
+        super("ISO-8859-10");
     }
 
     public boolean contains(Charset cs) {
