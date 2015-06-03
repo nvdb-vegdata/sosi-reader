@@ -34,14 +34,17 @@ public class DECN7 extends SosiCharset {
         super("DECN7");
     }
 
+    @Override
     public boolean contains(Charset cs) {
         return cs instanceof DECN7;
     }
 
+    @Override
     public CharsetDecoder newDecoder() {
         return new Decoder(this);
     }
 
+    @Override
     public CharsetEncoder newEncoder() {
         return new Encoder(this);
     }

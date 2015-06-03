@@ -34,14 +34,17 @@ public class ND7 extends SosiCharset {
         super("ND7");
     }
 
+    @Override
     public boolean contains(Charset cs) {
         return cs instanceof ND7;
     }
 
+    @Override
     public CharsetDecoder newDecoder() {
         return new Decoder(this);
     }
 
+    @Override
     public CharsetEncoder newEncoder() {
         return new Encoder(this);
     }

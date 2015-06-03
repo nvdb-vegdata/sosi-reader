@@ -351,12 +351,12 @@ public final class SosiTokenizer implements Closeable {
     // SosiParsingException.getLocation
     SosiLocation getLastCharLocation() {
         // Already read the char, so subtracting -1
-        return new SosiLocation(lineNo, bufferOffset +readBegin-lastLineOffset, bufferOffset +readBegin-1);
+        return SosiLocation.of(lineNo, bufferOffset +readBegin-lastLineOffset, bufferOffset +readBegin-1);
     }
 
     // Gives the parser location. Used for SosiParser.getLocation
     SosiLocation getLocation() {
-        return new SosiLocation(lineNo, bufferOffset +readBegin-lastLineOffset+1, bufferOffset +readBegin);
+        return SosiLocation.of(lineNo, bufferOffset +readBegin-lastLineOffset+1, bufferOffset +readBegin);
     }
 
     private int read() {

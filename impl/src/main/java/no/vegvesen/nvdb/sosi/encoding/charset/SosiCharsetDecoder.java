@@ -5,8 +5,6 @@
 // ALL RIGHTS RESERVED
 package no.vegvesen.nvdb.sosi.encoding.charset;
 
-import sun.nio.cs.ArrayDecoder;
-
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
@@ -20,7 +18,7 @@ import java.nio.charset.CoderResult;
  *
  * @author Tore Eide Andersen (Kantega AS)
  */
-abstract class SosiCharsetDecoder extends CharsetDecoder implements ArrayDecoder {
+abstract class SosiCharsetDecoder extends CharsetDecoder {
     SosiCharsetDecoder(Charset cs) {
         super(cs, 1.0f, 1.0f);
     }
@@ -68,20 +66,12 @@ abstract class SosiCharsetDecoder extends CharsetDecoder implements ArrayDecoder
         }
     }
 
+    @Override
     protected CoderResult decodeLoop(ByteBuffer src, CharBuffer dst) {
         if (src.hasArray() && dst.hasArray())
             return decodeArrayLoop(src, dst);
         else
             return decodeBufferLoop(src, dst);
-    }
-
-    public int decode(byte[] src, int sp, int len, char[] dst) {
-        if (len > dst.length)
-            len = dst.length;
-        int dp = 0;
-        while (dp < len)
-            dst[dp++] = toUtf16(src[sp++]);
-        return dp;
     }
 
     protected abstract char toUtf16(byte ch);

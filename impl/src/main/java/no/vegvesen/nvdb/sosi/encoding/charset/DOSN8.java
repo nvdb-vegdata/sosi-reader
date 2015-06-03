@@ -34,14 +34,17 @@ public class DOSN8 extends SosiCharset {
         super("DOSN8");
     }
 
+    @Override
     public boolean contains(Charset cs) {
         return cs instanceof DOSN8;
     }
 
+    @Override
     public CharsetDecoder newDecoder() {
         return new Decoder(this);
     }
 
+    @Override
     public CharsetEncoder newEncoder() {
         return new Encoder(this);
     }

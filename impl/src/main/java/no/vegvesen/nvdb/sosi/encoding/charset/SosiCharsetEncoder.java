@@ -5,9 +5,6 @@
 // ALL RIGHTS RESERVED
 package no.vegvesen.nvdb.sosi.encoding.charset;
 
-import sun.nio.cs.ArrayEncoder;
-import sun.nio.cs.Surrogate;
-
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
@@ -21,15 +18,17 @@ import java.nio.charset.CoderResult;
  *
  * @author Tore Eide Andersen (Kantega AS)
  */
-abstract class SosiCharsetEncoder extends CharsetEncoder implements ArrayEncoder {
+abstract class SosiCharsetEncoder extends CharsetEncoder {
     SosiCharsetEncoder(Charset cs) {
         super(cs, 1.0f, 1.0f);
     }
 
+    @Override
     public boolean canEncode(char c) {
         return c <= '\u00FF';
     }
 
+    @Override
     public boolean isLegalReplacement(byte[] repl) {
         return true;  // we accept any byte value
     }
@@ -104,6 +103,7 @@ abstract class SosiCharsetEncoder extends CharsetEncoder implements ArrayEncoder
         }
     }
 
+    @Override
     protected CoderResult encodeLoop(CharBuffer src, ByteBuffer dst) {
         if (src.hasArray() && dst.hasArray())
             return encodeArrayLoop(src, dst);
@@ -113,33 +113,9 @@ abstract class SosiCharsetEncoder extends CharsetEncoder implements ArrayEncoder
 
     private byte repl = (byte)'?';
 
+    @Override
     protected void implReplaceWith(byte[] newReplacement) {
         repl = newReplacement[0];
-    }
-
-    public int encode(char[] src, int sp, int len, byte[] dst) {
-        int dp = 0;
-        int slen = Math.min(len, dst.length);
-        int sl = sp + slen;
-        while (sp < sl) {
-            int ret = encodeISOArray(src, sp, dst, dp, slen);
-            sp = sp + ret;
-            dp = dp + ret;
-            if (ret != slen) {
-                char c = src[sp++];
-                if (Character.isHighSurrogate(c) && sp < sl &&
-                        Character.isLowSurrogate(src[sp])) {
-                    if (len > dst.length) {
-                        sl++;
-                        len--;
-                    }
-                    sp++;
-                }
-                dst[dp++] = repl;
-                slen = Math.min((sl - sp), (dst.length - dp));
-            }
-        }
-        return dp;
     }
 
     protected abstract byte fromUtf16(char ch);

@@ -15,14 +15,23 @@ package no.vegvesen.nvdb.sosi;
  * @author Tore Eide Andersen (Kantega AS)
  */
 public class SosiLocation {
-
-    public static final SosiLocation UNKNOWN = new SosiLocation(-1, -1, -1);
-
     private final long columnNo;
     private final long lineNo;
     private final long offset;
 
-    public SosiLocation(long lineNo, long columnNo, long streamOffset) {
+    public static SosiLocation of(long lineNo) {
+        return new SosiLocation(lineNo, -1, -1);
+    }
+
+    public static SosiLocation of(long lineNo, long columnNo, long streamOffset) {
+        return new SosiLocation(lineNo, columnNo, streamOffset);
+    }
+
+    public static SosiLocation unknown() {
+        return SosiLocation.of(-1, -1, -1);
+    }
+
+    private SosiLocation(long lineNo, long columnNo, long streamOffset) {
         this.lineNo = lineNo;
         this.columnNo = columnNo;
         this.offset = streamOffset;

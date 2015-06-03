@@ -55,14 +55,17 @@ public class ISO8859_10 extends SosiCharset {
         super("ISO-8859-10");
     }
 
+    @Override
     public boolean contains(Charset cs) {
         return cs instanceof ISO8859_10;
     }
 
+    @Override
     public CharsetDecoder newDecoder() {
         return new Decoder(this);
     }
 
+    @Override
     public CharsetEncoder newEncoder() {
         return new Encoder(this);
     }
