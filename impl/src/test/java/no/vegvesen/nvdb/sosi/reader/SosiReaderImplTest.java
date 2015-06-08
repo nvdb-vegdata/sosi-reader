@@ -7,11 +7,16 @@ import no.vegvesen.nvdb.sosi.document.SosiNumber;
 import no.vegvesen.nvdb.sosi.document.SosiSerialNumber;
 import no.vegvesen.nvdb.sosi.document.SosiString;
 import no.vegvesen.nvdb.sosi.document.SosiValue;
+import no.vegvesen.nvdb.sosi.encoding.SosiEncoding;
 import org.junit.Test;
 
 import java.io.StringReader;
+import java.nio.charset.Charset;
 import java.util.Optional;
 
+import static no.vegvesen.nvdb.sosi.TestUtils.getResource;
+import static no.vegvesen.nvdb.sosi.TestUtils.streamToBytes;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.junit.Assert.*;
@@ -62,5 +67,17 @@ public class SosiReaderImplTest {
         assertThat(valueOfGruppe, instanceOf(SosiSerialNumber.class));
         SosiSerialNumber serNo = (SosiSerialNumber)valueOfGruppe;
         assertThat(serNo.longValue(), is(1L));
+    }
+
+    @Test
+    public void shouldDetectValidORIGONØ() {
+        byte[] sosiBytes = streamToBytes(getResource("valid_real_data2.sos"), 2048);
+        Optional<Charset> charset = SosiEncoding.charsetOf(sosiBytes);
+        assertThat(charset.isPresent(), is(true));
+        assertThat(charset.get().name(), equalTo("ISO-8859-1"));
+
+        SosiReader reader = Sosi.createReader(getResource("valid_real_data2.sos"));
+        SosiDocument doc = reader.read();
+        assertThat(doc.findElementRecursively("ORIGO-NØ").isPresent(), is(true));
     }
 }
