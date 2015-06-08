@@ -52,7 +52,7 @@ public class Sosi {
      * @return the encoding
      */
     public static Charset getEncoding(byte[] sosi) {
-        return SosiEncoding.charsetOf(sosi).orElse(SosiEncoding.defaultCharset());
+        return SosiEncoding.charsetOf(sosi).orElseGet(SosiEncoding::defaultCharset);
     }
 
     /**
