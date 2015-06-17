@@ -37,7 +37,7 @@ public class SosiWriterImplTest {
 
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             Writer streamWriter = new OutputStreamWriter(outputStream, doc.getEncoding());
-            try (SosiWriter writer = Sosi.createWriter(streamWriter, SosiWriterImplTest::valueFormatter)) {
+            try (SosiWriter writer = Sosi.createWriter(streamWriter, SosiWriterImplTest::valueFormatter, new LocationBasedSosiLayoutFormatter())) {
                 writer.write(doc);
             }
 

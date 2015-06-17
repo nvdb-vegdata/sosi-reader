@@ -11,6 +11,7 @@ import no.vegvesen.nvdb.sosi.reader.SosiReaderImpl;
 import no.vegvesen.nvdb.sosi.utils.BufferPoolImpl;
 import no.vegvesen.nvdb.sosi.parser.SosiParserImpl;
 import no.vegvesen.nvdb.sosi.parser.SosiParser;
+import no.vegvesen.nvdb.sosi.writer.SosiLayoutFormatter;
 import no.vegvesen.nvdb.sosi.writer.SosiValueFormatter;
 import no.vegvesen.nvdb.sosi.writer.SosiWriter;
 import no.vegvesen.nvdb.sosi.writer.SosiWriterImpl;
@@ -113,8 +114,8 @@ public class Sosi {
      *
      * @param writer a i/o writer to which SOSI is written
      */
-    public static SosiWriter createWriter(Writer writer, SosiValueFormatter valueFormatter) {
-        return new SosiWriterImpl(writer, valueFormatter);
+    public static SosiWriter createWriter(Writer writer, SosiValueFormatter valueFormatter, SosiLayoutFormatter layoutFormatter) {
+        return new SosiWriterImpl(writer, valueFormatter, layoutFormatter);
     }
 
     /**

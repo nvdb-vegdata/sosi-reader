@@ -8,12 +8,28 @@ package no.vegvesen.nvdb.sosi.writer;
 import no.vegvesen.nvdb.sosi.document.SosiElement;
 import no.vegvesen.nvdb.sosi.document.SosiValue;
 
-import java.util.function.BiFunction;
 
 /**
- * Defines a SOSI value formatter
+ * Implements a layout formatter that prints a single element (plus its values) on each line
  *
  * @author Tore Eide Andersen (Kantega AS)
  */
-public interface SosiValueFormatter extends BiFunction<SosiElement, SosiValue, String> {
+public class DefaultSosiLayoutFormatter implements SosiLayoutFormatter {
+    private long lineNo = 1;
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String beforeValue(SosiValue value) {
+        return " ";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String beforeElement(SosiElement element) {
+        return lineNo++ == 1 ? "" : "\n";
+    }
 }

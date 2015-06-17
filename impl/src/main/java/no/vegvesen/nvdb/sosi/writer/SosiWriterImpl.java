@@ -23,33 +23,34 @@ import java.nio.charset.Charset;
 public class SosiWriterImpl implements SosiWriter {
     private final Writer writer;
     private final SosiValueFormatter valueFormatter;
-    private long lineNo;
+    private final SosiLayoutFormatter layoutFormatter;
 
     public SosiWriterImpl(Writer writer) {
         this.writer = writer;
         this.valueFormatter = new DefaultSosiValueFormatter();
+        this.layoutFormatter = new DefaultSosiLayoutFormatter();
     }
 
-    public SosiWriterImpl(Writer writer, SosiValueFormatter valueFormatter) {
+    public SosiWriterImpl(Writer writer, SosiValueFormatter valueFormatter, SosiLayoutFormatter layoutFormatter) {
         this.writer = writer;
         this.valueFormatter = valueFormatter;
+        this.layoutFormatter = layoutFormatter;
     }
 
     public SosiWriterImpl(OutputStream stream, Charset encoding) {
         this.writer = new OutputStreamWriter(stream, encoding);
         this.valueFormatter = new DefaultSosiValueFormatter();
+        this.layoutFormatter = new DefaultSosiLayoutFormatter();
     }
 
     @Override
     public void write(SosiDocument doc) {
         try {
-            lineNo = 1;
             writeElement(1, doc.getHead());
             doc.elements()
                     .filter(e -> !e.getName().equalsIgnoreCase("HODE"))
                     .forEach(e -> writeElement(1, e));
-            advanceToLine(lineNo + 1);
-            writer.append(".SLUTT\n");
+            writer.append("\n.SLUTT\n");
         } catch (IOException e) {
             throw new RuntimeException("Failed to write document", e);
         }
@@ -66,11 +67,7 @@ public class SosiWriterImpl implements SosiWriter {
 
     private void writeElement(int level, SosiElement element) {
         try {
-            if (!advanceToLine(element.getLocation().getLineNumber())) {
-                if (lineNo > 1) {
-                    writer.append(" ");
-                }
-            }
+            writer.append(layoutFormatter.beforeElement(element));
             writeLevel(level);
             writer.append(element.getName());
             element.values().forEach(v -> writeValue(element, v));
@@ -82,10 +79,7 @@ public class SosiWriterImpl implements SosiWriter {
 
     private void writeValue(SosiElement element, SosiValue value) {
         try {
-            if (!advanceToLine(value.getLocation().getLineNumber())) {
-                writer.append(" ");
-            }
-
+            writer.append(layoutFormatter.beforeValue(value));
             String valueAsString = valueFormatter.apply(element, value);
 
             writer.append(valueAsString);
@@ -98,14 +92,5 @@ public class SosiWriterImpl implements SosiWriter {
         for (int i = 0; i < level; i++) {
             writer.append(".");
         }
-    }
-
-    private boolean advanceToLine(long nextLineNo) throws IOException{
-        long prevLineNo = lineNo;
-        while (lineNo < nextLineNo) {
-            writer.append("\n");
-            lineNo++;
-        }
-        return lineNo > prevLineNo;
     }
 }

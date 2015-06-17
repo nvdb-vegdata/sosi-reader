@@ -13,11 +13,15 @@ import static no.vegvesen.nvdb.sosi.document.SosiValue.ValueType.SERNO;
 import static no.vegvesen.nvdb.sosi.document.SosiValue.ValueType.STRING;
 
 /**
- * TODO: Purpose and responsibility
+ * Implements the default SOSI value formatter
  *
  * @author Tore Eide Andersen (Kantega AS)
  */
 public class DefaultSosiValueFormatter implements SosiValueFormatter {
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String apply(SosiElement element, SosiValue value) {
         if (value.getValueType() == STRING) {
