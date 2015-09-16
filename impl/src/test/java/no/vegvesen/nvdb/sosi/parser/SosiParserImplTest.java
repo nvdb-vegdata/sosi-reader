@@ -84,6 +84,9 @@ public class SosiParserImplTest {
                 ev(VALUE_NUMBER, "12.3"),
                 ev(VALUE_STRING, ":x"),
                 ev(VALUE_STRING, ":12.0"),
+                ev(VALUE_STRING, "E6"),
+                ev(VALUE_STRING, "-E6"),
+                ev(VALUE_NUMBER, "-.1d2"),
                 ev(END_ELEMENT),
                 ev(END_HEAD),
                 ev(END)

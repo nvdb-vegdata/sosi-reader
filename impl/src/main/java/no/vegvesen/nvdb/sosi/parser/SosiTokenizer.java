@@ -226,13 +226,16 @@ public final class SosiTokenizer implements Closeable {
         }
 
         // int
+        boolean intFound = false;
         while (isDigit(buf[i])) {
             if (++i == to) {
                 return true;
             }
+            intFound = true;
         }
 
         // frac
+        boolean fracFound = false;
         if (buf[i] == '.') {
             this.fracOrExp = true;
             int count = 0;
@@ -245,22 +248,25 @@ public final class SosiTokenizer implements Closeable {
             if (count == 1) {
                 return false;
             }
+            fracFound = true;
         }
 
-        // exp
-        if (isExpSpecifier(buf[i])) {
-            this.fracOrExp = true;
-            if (++i == to) {
-                return false;
-            }
-            if (isSign(buf[i])) {
+        // exp (only allowed if preceeded by int and/or frac)
+        if (intFound || fracFound) {
+            if (isExpSpecifier(buf[i])) {
+                this.fracOrExp = true;
                 if (++i == to) {
                     return false;
                 }
-            }
-            while (isDigit(buf[i])) {
-                if (++i == to) {
-                    return true;
+                if (isSign(buf[i])) {
+                    if (++i == to) {
+                        return false;
+                    }
+                }
+                while (isDigit(buf[i])) {
+                    if (++i == to) {
+                        return true;
+                    }
                 }
             }
         }
