@@ -65,6 +65,8 @@ public class SosiReaderImpl implements SosiReader {
                 SosiElement element = readElement(new SosiElementBuilderImpl(parser.getString(), parser.getLocation()));
                 elements.add(element);
             } else if (e == END) {
+                SosiElement endElement = new SosiElementBuilderImpl(parser.getString(), parser.getLocation()).build();
+                elements.add(endElement);
                 return SosiDocumentImpl.of(elements);
             }
         }

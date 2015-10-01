@@ -28,16 +28,15 @@ import static java.util.Objects.requireNonNull;
  * @author Tore Eide Andersen (Kantega AS)
  */
 class SosiDocumentImpl implements SosiDocument {
-    private static final String ELEMENT_HEAD = "HODE";
     private static final String ELEMENT_CHARSET = "TEGNSETT";
 
-    private List<SosiElement> elements;
+    private Collection<SosiElement> elements;
 
-    static SosiDocument of(List<SosiElement> elements) {
+    static SosiDocument of(Collection<SosiElement> elements) {
         return new SosiDocumentImpl(elements);
     }
 
-    SosiDocumentImpl(List<SosiElement> elements) {
+    SosiDocumentImpl(Collection<SosiElement> elements) {
         this.elements = requireNonNull(elements, "elements can't be null");
     }
 
@@ -60,6 +59,14 @@ class SosiDocumentImpl implements SosiDocument {
     @Override
     public Collection<SosiElement> getElements() {
         return Collections.unmodifiableCollection(elements);
+    }
+
+    @Override
+    public SosiElement getEnd() {
+        return elements()
+                .filter(e -> e.getName().equalsIgnoreCase(ELEMENT_END))
+                .findFirst()
+                .orElseThrow(() -> new NoSuchElementException("End element not found"));
     }
 
     @Override

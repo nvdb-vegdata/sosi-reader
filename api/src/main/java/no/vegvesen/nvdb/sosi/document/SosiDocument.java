@@ -16,12 +16,16 @@ import java.util.stream.Stream;
  * @author Tore Eide Andersen (Kantega AS)
  */
 public interface SosiDocument {
+    String ELEMENT_HEAD = "HODE";
+    String ELEMENT_END = "SLUTT";
 
     Charset getEncoding();
 
     SosiElement getHead();
 
     Collection<SosiElement> getElements();
+
+    SosiElement getEnd();
 
     Stream<SosiElement> elements();
 

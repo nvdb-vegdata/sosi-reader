@@ -45,15 +45,7 @@ public class SosiWriterImpl implements SosiWriter {
 
     @Override
     public void write(SosiDocument doc) {
-        try {
-            writeElement(1, doc.getHead());
-            doc.elements()
-                    .filter(e -> !e.getName().equalsIgnoreCase("HODE"))
-                    .forEach(e -> writeElement(1, e));
-            writer.append("\n.SLUTT\n");
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to write document", e);
-        }
+        doc.elements().forEach(e -> writeElement(1, e));
     }
 
     @Override
@@ -81,7 +73,6 @@ public class SosiWriterImpl implements SosiWriter {
         try {
             writer.append(layoutFormatter.beforeValue(value));
             String valueAsString = valueFormatter.apply(element, value);
-
             writer.append(valueAsString);
         } catch (IOException e) {
             throw new RuntimeException("Failed to write value", e);

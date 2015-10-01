@@ -35,7 +35,7 @@ public class SosiReaderImplTest {
         SosiReader reader = Sosi.createReader(new StringReader(sosi));
         SosiDocument doc = reader.read();
 
-        assertThat(doc.elements().count(), is(1L));
+        assertThat(doc.elements().count(), is(2L));
         SosiElement head = doc.getHead();
         assertThat(head.values().count(), is(0L));
         assertThat(head.subElements().count(), is(4L));

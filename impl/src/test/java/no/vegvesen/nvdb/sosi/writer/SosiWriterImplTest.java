@@ -10,9 +10,9 @@ import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;
+import java.io.StringReader;
 import java.io.Writer;
 
-import static java.util.Arrays.asList;
 import static no.vegvesen.nvdb.sosi.TestUtils.getResource;
 import static no.vegvesen.nvdb.sosi.TestUtils.streamToString;
 import static org.hamcrest.Matchers.is;
@@ -28,22 +28,59 @@ public class SosiWriterImplTest {
     @Test
     public void shouldWriteSameAsRead() {
         String[] files = new String[]{"valid_no_comments.sos", "valid_real_data.sos"};
+
         for (String file : files) {
+            SosiDocument doc = readSosiResource(file);
+            String sosi = writeSosi(doc, new LocationBasedSosiLayoutFormatter(LineEnding.UNIX));
 
-            SosiDocument doc;
-            try (SosiReader reader = Sosi.createReader(getResource(file))) {
-                doc = reader.read();
-            }
-
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            Writer streamWriter = new OutputStreamWriter(outputStream, doc.getEncoding());
-            try (SosiWriter writer = Sosi.createWriter(streamWriter, SosiWriterImplTest::valueFormatter, new LocationBasedSosiLayoutFormatter())) {
-                writer.write(doc);
-            }
-
-            String sosi = new String(outputStream.toByteArray());
             assertSame(file, sosi);
         }
+    }
+
+    @Test
+    public void shouldSupportWindowsLineEnding() {
+        final String sosi = ".HODE\r\n..VERDI 123\r\n.SLUTT";
+
+        SosiDocument doc = readSosiString(sosi);
+        String sosiOut = writeSosi(doc, new LocationBasedSosiLayoutFormatter(LineEnding.WINDOWS));
+
+        assertThat(sosiOut, is(sosi));
+    }
+
+    @Test
+    public void shouldQuoteStringValuesWithWhitespace() {
+        String sosi = ".HODE ..VERDI \"Verdi med mellomrom\" ..VERDI VerdiUtenMellomrom .SLUTT";
+
+        SosiDocument doc = readSosiString(sosi);
+        String sosiOut = writeSosi(doc, new LocationBasedSosiLayoutFormatter());
+
+        assertThat(sosiOut, is(sosi));
+    }
+
+    private SosiDocument readSosiResource(String resource) {
+        SosiDocument doc;
+        try (SosiReader reader = Sosi.createReader(getResource(resource))) {
+            doc = reader.read();
+        }
+        return doc;
+    }
+
+    private SosiDocument readSosiString(String sosi) {
+        SosiDocument doc;
+        try (SosiReader reader = Sosi.createReader(new StringReader(sosi))) {
+            doc = reader.read();
+        }
+        return doc;
+    }
+
+    private String writeSosi(SosiDocument doc, SosiLayoutFormatter layoutFormatter) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        Writer streamWriter = new OutputStreamWriter(outputStream, doc.getEncoding());
+        try (SosiWriter writer = Sosi.createWriter(streamWriter, SosiWriterImplTest::valueFormatter, layoutFormatter)) {
+            writer.write(doc);
+        }
+
+        return new String(outputStream.toByteArray());
     }
 
     private void assertSame(String expectedSosiResource, String actualSosi) {
@@ -52,9 +89,7 @@ public class SosiWriterImplTest {
     }
 
     private static String valueFormatter(SosiElement element, SosiValue value) {
-        if (asList("TEGNSETT", "OBJTYPE", "VERT-DATUM").contains(element.getName())) {
-            return value.getString();
-        } else if ("PTEMA".equalsIgnoreCase(element.getName())) {
+        if ("PTEMA".equalsIgnoreCase(element.getName())) {
             return String.format("%04d", ((SosiNumber) value).intValue());
         } else {
             return new DefaultSosiValueFormatter().apply(element, value);

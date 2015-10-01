@@ -33,7 +33,10 @@ public class TestUtils {
             StringBuilder out = new StringBuilder();
             String line;
             while (nonNull(line = reader.readLine())) {
-                out.append(line).append("\n");
+                if (out.length() > 0) {
+                    out.append("\n");
+                }
+                out.append(line);
             }
             return out.toString();
         } catch (IOException e) {

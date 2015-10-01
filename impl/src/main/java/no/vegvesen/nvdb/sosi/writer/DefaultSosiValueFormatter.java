@@ -24,7 +24,7 @@ public class DefaultSosiValueFormatter implements SosiValueFormatter {
      */
     @Override
     public String apply(SosiElement element, SosiValue value) {
-        if (value.getValueType() == STRING) {
+        if (value.getValueType() == STRING && containsWhitespace(value.getString())) {
             return "\"" + value.getString() + "\"";
         } else if (value.getValueType() == REF) {
             return ":" + value.getString();
@@ -33,5 +33,9 @@ public class DefaultSosiValueFormatter implements SosiValueFormatter {
         } else {
             return value.getString();
         }
+    }
+
+    private boolean containsWhitespace(String value) {
+        return !value.matches("^\\S*$");
     }
 }

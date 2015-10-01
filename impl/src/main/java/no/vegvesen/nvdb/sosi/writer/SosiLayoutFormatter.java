@@ -15,7 +15,6 @@ import no.vegvesen.nvdb.sosi.document.SosiValue;
  * @author Tore Eide Andersen (Kantega AS)
  */
 public interface SosiLayoutFormatter {
-
     /**
      * The string to prepend a value in the SOSI file.
      * @param value the value to be prepended

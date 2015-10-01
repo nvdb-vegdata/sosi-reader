@@ -15,7 +15,16 @@ import no.vegvesen.nvdb.sosi.document.SosiValue;
  * @author Tore Eide Andersen (Kantega AS)
  */
 public class DefaultSosiLayoutFormatter implements SosiLayoutFormatter {
+    private final LineEnding lineEnding;
     private long lineNo = 1;
+
+    public DefaultSosiLayoutFormatter() {
+        this.lineEnding = LineEnding.WINDOWS;
+    }
+
+    public DefaultSosiLayoutFormatter(LineEnding lineEnding) {
+        this.lineEnding = lineEnding;
+    }
 
     /**
      * {@inheritDoc}
@@ -30,6 +39,6 @@ public class DefaultSosiLayoutFormatter implements SosiLayoutFormatter {
      */
     @Override
     public String beforeElement(SosiElement element) {
-        return lineNo++ == 1 ? "" : "\n";
+        return lineNo++ == 1 ? "" : lineEnding.getCharSequence();
     }
 }

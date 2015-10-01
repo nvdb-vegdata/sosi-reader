@@ -15,7 +15,17 @@ import no.vegvesen.nvdb.sosi.document.SosiValue;
  * @author Tore Eide Andersen (Kantega AS)
  */
 public class LocationBasedSosiLayoutFormatter implements SosiLayoutFormatter {
+    private final LineEnding lineEnding;
     private long lineNo = 1;
+    private long elementNo = 0;
+
+    public LocationBasedSosiLayoutFormatter() {
+        this.lineEnding = LineEnding.WINDOWS;
+    }
+
+    public LocationBasedSosiLayoutFormatter(LineEnding lineEnding) {
+        this.lineEnding = lineEnding;
+    }
 
     /**
      * {@inheritDoc}
@@ -34,9 +44,10 @@ public class LocationBasedSosiLayoutFormatter implements SosiLayoutFormatter {
      */
     @Override
     public String beforeElement(SosiElement element) {
+        elementNo++;
         StringBuilder sb = new StringBuilder();
         if (!advanceToLine(sb, element.getLocation().getLineNumber())) {
-            if (lineNo > 1) {
+            if (elementNo > 1) {
                 sb.append(" ");
             }
         }
@@ -46,7 +57,7 @@ public class LocationBasedSosiLayoutFormatter implements SosiLayoutFormatter {
     private boolean advanceToLine(StringBuilder sb, long nextLineNo) {
         long prevLineNo = lineNo;
         while (lineNo < nextLineNo) {
-            sb.append("\n");
+            sb.append(lineEnding.getCharSequence());
             lineNo++;
         }
         return lineNo > prevLineNo;

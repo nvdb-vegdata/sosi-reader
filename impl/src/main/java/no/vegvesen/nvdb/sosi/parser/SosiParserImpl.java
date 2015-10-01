@@ -77,7 +77,7 @@ public class SosiParserImpl implements SosiParser {
 
     @Override
     public String getString() {
-        if (currentEvent.isOneOf(Event.START_HEAD, Event.START_ELEMENT, Event.VALUE_STRING, Event.VALUE_NUMBER, Event.VALUE_SERNO, Event.VALUE_REF, Event.COMMENT)) {
+        if (currentEvent.isOneOf(Event.START_HEAD, Event.START_ELEMENT, Event.VALUE_STRING, Event.VALUE_NUMBER, Event.VALUE_SERNO, Event.VALUE_REF, Event.COMMENT, Event.END)) {
             String value = tokenizer.getValue();
 
             if (currentEvent == Event.VALUE_STRING) {
