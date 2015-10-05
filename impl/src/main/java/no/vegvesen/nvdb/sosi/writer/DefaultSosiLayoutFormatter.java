@@ -16,6 +16,8 @@ import no.vegvesen.nvdb.sosi.document.SosiValue;
  */
 public class DefaultSosiLayoutFormatter implements SosiLayoutFormatter {
     private final LineEnding lineEnding;
+    private String currentElement;
+    private long valueNo;
     private long lineNo = 1;
 
     public DefaultSosiLayoutFormatter() {
@@ -31,6 +33,18 @@ public class DefaultSosiLayoutFormatter implements SosiLayoutFormatter {
      */
     @Override
     public String beforeValue(SosiValue value) {
+        valueNo++;
+        if ("NØH".equals(currentElement)) {
+            if ((valueNo-1) % 3 == 0) {
+                return lineEnding.getCharSequence();
+            }
+        }
+        if ("NØ".equals(currentElement)) {
+            if ((valueNo-1) % 2 == 0) {
+                return lineEnding.getCharSequence();
+            }
+        }
+
         return " ";
     }
 
@@ -39,6 +53,8 @@ public class DefaultSosiLayoutFormatter implements SosiLayoutFormatter {
      */
     @Override
     public String beforeElement(SosiElement element) {
+        currentElement = element.getName();
+        valueNo = 0;
         return lineNo++ == 1 ? "" : lineEnding.getCharSequence();
     }
 }
