@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static java.util.Objects.isNull;
@@ -50,20 +51,20 @@ class SosiElementImpl implements SosiElement {
     }
 
     @Override
-    public Optional<SosiElement> findSubElement(String name) {
-        requireNonNull(name, "name can't be null");
-        return subElements().filter(e -> e.getName().equalsIgnoreCase(name)).findFirst();
+    public Optional<SosiElement> findSubElement(Predicate<SosiElement> predicate) {
+        requireNonNull(predicate, "predicate can't be null");
+        return subElements().filter(predicate).findFirst();
     }
 
     @Override
-    public Optional<SosiElement> findSubElementRecursively(String name) {
-        requireNonNull(name, "name can't be null");
-        Optional<SosiElement> maybeMatch = findSubElement(name);
+    public Optional<SosiElement> findSubElementRecursively(Predicate<SosiElement> predicate) {
+        requireNonNull(predicate, "predicate can't be null");
+        Optional<SosiElement> maybeMatch = findSubElement(predicate);
         if (maybeMatch.isPresent()) {
             return maybeMatch;
         } else {
             for (SosiElement element : subElements) {
-                maybeMatch = element.findSubElementRecursively(name);
+                maybeMatch = element.findSubElementRecursively(predicate);
                 if (maybeMatch.isPresent()) {
                     return maybeMatch;
                 }
@@ -73,15 +74,24 @@ class SosiElementImpl implements SosiElement {
     }
 
     @Override
-    public List<SosiElement> findSubElements(String... names) {
-        requireNonNull(names, "No names specified");
-        Set<String> namesToFind = Arrays.stream(names).map(String::toUpperCase).collect(toSet());
-        return subElements().filter(e -> namesToFind.contains(e.getName().toUpperCase())).collect(toList());
+    public Stream<SosiElement> findSubElements(Predicate<SosiElement> predicate) {
+        requireNonNull(predicate, "predicate can't be null");
+        return subElements().filter(predicate);
+    }
+
+    @Override
+    public boolean hasSubElements() {
+        return subElements().anyMatch(e -> true);
     }
 
     @Override
     public Stream<SosiElement> subElements() {
         return isNull(subElements) ? Stream.empty() : subElements.stream();
+    }
+
+    @Override
+    public boolean hasValues() {
+        return values().anyMatch(v -> true);
     }
 
     @Override

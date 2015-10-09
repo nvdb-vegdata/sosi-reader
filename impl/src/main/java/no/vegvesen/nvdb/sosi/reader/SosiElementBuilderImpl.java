@@ -7,6 +7,7 @@ package no.vegvesen.nvdb.sosi.reader;
 
 import no.vegvesen.nvdb.sosi.SosiMessages;
 import no.vegvesen.nvdb.sosi.document.SosiElement;
+import no.vegvesen.nvdb.sosi.document.SosiRefNumber;
 import no.vegvesen.nvdb.sosi.document.SosiValue;
 import no.vegvesen.nvdb.sosi.SosiLocation;
 
@@ -38,6 +39,13 @@ class SosiElementBuilderImpl implements SosiElementBuilder {
     public SosiElementBuilder addValue(SosiValue value) {
         validateValue(value);
         putValue(value);
+        return this;
+    }
+
+    @Override
+    public SosiElementBuilder addIslandValue(SosiValue value) {
+        validateValue(value);
+        putIslandValue(value);
         return this;
     }
 
@@ -131,6 +139,21 @@ class SosiElementBuilderImpl implements SosiElementBuilder {
 
         SosiValue newValue = SosiStringImpl.of(lastValue.getString() + value.getString(), lastValue.getLocation());
         values.set(values.size() - 1, newValue);
+    }
+
+    private void putIslandValue(SosiValue value) {
+        if (!(value instanceof SosiRefNumberImpl)) {
+            throw new IllegalArgumentException("Islands support SosiRefNumber values only");
+        }
+        if (isNull(values)) {
+            throw new IllegalStateException("Cannot put island value when there are no values");
+        }
+        SosiValue lastValue = values.get(values.size()-1);
+        if (!(lastValue instanceof SosiRefIslandImpl)) {
+            throw new IllegalArgumentException("No island to put value into");
+        }
+
+        ((SosiRefIslandImpl)lastValue).addRefNumber((SosiRefNumber) value);
     }
 
     private void putSubElement(SosiElement element) {

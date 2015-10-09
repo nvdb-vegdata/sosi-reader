@@ -17,6 +17,8 @@ public interface SosiElementBuilder {
 
     SosiElementBuilder addValue(SosiValue value);
 
+    SosiElementBuilder addIslandValue(SosiValue value);
+
     SosiElementBuilder addValue(String value, SosiLocation location);
 
     SosiElementBuilder concatValue(String value, SosiLocation location);

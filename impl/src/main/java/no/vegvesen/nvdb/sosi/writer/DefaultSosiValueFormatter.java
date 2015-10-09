@@ -26,10 +26,6 @@ public class DefaultSosiValueFormatter implements SosiValueFormatter {
     public String apply(SosiElement element, SosiValue value) {
         if (value.getValueType() == STRING && containsWhitespace(value.getString())) {
             return "\"" + value.getString() + "\"";
-        } else if (value.getValueType() == REF) {
-            return ":" + value.getString();
-        } else if (value.getValueType() == SERNO) {
-            return value.getString() + ":";
         } else {
             return value.getString();
         }

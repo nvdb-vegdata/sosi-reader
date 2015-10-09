@@ -3,27 +3,17 @@
 // express written consent of Statens vegvesen is strictly prohibited.
 // Copyright © 2015 Statens vegvesen
 // ALL RIGHTS RESERVED
-package no.vegvesen.nvdb.sosi.document;
+package no.vegvesen.nvdb.sosi.utils;
 
+import java.util.function.Function;
 
 /**
- * An immutable SOSI reference number value.
+ * TODO: Purpose and responsibility
  *
  * @author Tore Eide Andersen (Kantega AS)
  */
-public interface SosiRefNumber extends SosiValue{
-    boolean isInsideIsland();
-
-    long longValue();
-
-    long longValueExact();
-
-    @Override
-    String toString();
-
-    @Override
-    boolean equals(Object obj);
-
-    @Override
-    int hashCode();
+public abstract class Functions {
+    public static <S, T> Function<S,T> castTo(Class<T> targetClass) {
+        return targetClass::cast;
+    }
 }

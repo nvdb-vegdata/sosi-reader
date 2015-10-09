@@ -5,25 +5,24 @@
 // ALL RIGHTS RESERVED
 package no.vegvesen.nvdb.sosi.document;
 
+import java.util.stream.Stream;
 
 /**
- * An immutable SOSI reference number value.
+ * An immutable SOSI reference island (containing one or more reference number values).
  *
  * @author Tore Eide Andersen (Kantega AS)
  */
-public interface SosiRefNumber extends SosiValue{
-    boolean isInsideIsland();
+public interface SosiRefIsland extends SosiValue {
+    Stream<SosiRefNumber> refNumbers();
 
-    long longValue();
-
-    long longValueExact();
+    String getString();
 
     @Override
-    String toString();
+    int hashCode();
 
     @Override
     boolean equals(Object obj);
 
     @Override
-    int hashCode();
+    String toString();
 }

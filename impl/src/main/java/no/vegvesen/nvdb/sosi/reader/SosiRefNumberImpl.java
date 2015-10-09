@@ -15,17 +15,23 @@ import no.vegvesen.nvdb.sosi.SosiLocation;
  */
 class SosiRefNumberImpl implements SosiRefNumber {
     private final long num;
+    private final boolean insideIsland;
     private final SosiLocation location;
 
-    static SosiRefNumber of(long num, SosiLocation location) {
-        return new SosiRefNumberImpl(num, location);
+    static SosiRefNumber of(long num, boolean island, SosiLocation location) {
+        return new SosiRefNumberImpl(num, island, location);
     }
 
-    SosiRefNumberImpl(long num, SosiLocation location) {
+    SosiRefNumberImpl(long num, boolean insideIsland, SosiLocation location) {
         this.num = num;
+        this.insideIsland = insideIsland;
         this.location = location;
     }
 
+    @Override
+    public boolean isInsideIsland() {
+        return insideIsland;
+    }
     @Override
     public long longValue() {
         return num;
@@ -48,7 +54,7 @@ class SosiRefNumberImpl implements SosiRefNumber {
 
     @Override
     public String getString() {
-        return Long.toString(num);
+        return ":" + Long.toString(num);
     }
 
     @Override

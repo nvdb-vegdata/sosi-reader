@@ -8,6 +8,7 @@ package no.vegvesen.nvdb.sosi.document;
 import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 /**
@@ -29,7 +30,7 @@ public interface SosiDocument {
 
     Stream<SosiElement> elements();
 
-    Optional<SosiElement> findElement(String name);
+    Optional<SosiElement> findElement(Predicate<SosiElement> predicate);
 
-    Optional<SosiElement> findElementRecursively(String name);
+    Optional<SosiElement> findElementRecursively(Predicate<SosiElement> predicate);
 }

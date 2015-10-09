@@ -14,6 +14,8 @@ import java.util.Map;
 import static java.util.Objects.nonNull;
 import static no.vegvesen.nvdb.sosi.TestUtils.getResource;
 import static no.vegvesen.nvdb.sosi.parser.SosiParser.Event;
+import static no.vegvesen.nvdb.sosi.parser.SosiParser.Event.END_REF_ISLAND;
+import static no.vegvesen.nvdb.sosi.parser.SosiParser.Event.START_REF_ISLAND;
 import static no.vegvesen.nvdb.sosi.parser.SosiParser.Event.START_ELEMENT;
 import static no.vegvesen.nvdb.sosi.parser.SosiParser.Event.START_HEAD;
 import static no.vegvesen.nvdb.sosi.parser.SosiParser.Event.COMMENT;
@@ -106,6 +108,55 @@ public class SosiParserImplTest {
         };
 
         assertParsingException(invalidSosis, "Konkatenering krever strengverdier på begge sider");
+    }
+
+    @Test
+    public void shouldParseParentheses() {
+        final String sosi = ".HODE ..REF :1 (:2 :-3 :4) :5 (:-6) :-7 .SLUTT";
+
+        final EventValue[] expectedEvents = new EventValue[]{
+                ev(START_HEAD, "HODE"),
+                ev(START_ELEMENT, "REF"),
+                ev(VALUE_REF, "1"),
+                ev(START_REF_ISLAND),
+                ev(VALUE_REF, "2"),
+                ev(VALUE_REF, "-3"),
+                ev(VALUE_REF, "4"),
+                ev(END_REF_ISLAND),
+                ev(VALUE_REF, "5"),
+                ev(START_REF_ISLAND),
+                ev(VALUE_REF, "-6"),
+                ev(END_REF_ISLAND),
+                ev(VALUE_REF, "-7"),
+                ev(END_ELEMENT),
+                ev(END_HEAD),
+                ev(END)
+        };
+
+        assertEventSequenceFromParser(expectedEvents, Sosi.createParser(new StringReader(sosi)));
+    }
+
+    @Test
+    public void shouldDetectUnmatchedParentheses() {
+        final String[] invalidSosis = new String[]{
+                //".HODE ..REF (:1 ) .SLUTT",
+                ".HODE ..REF ( :1) .SLUTT",
+                ".HODE ..REF (:1 :-2 .SLUTT",
+                ".HODE ..REF :1 :-2) .SLUTT"
+        };
+
+        assertParsingException(invalidSosis, "Parenteser må opptre i par");
+    }
+
+    @Test
+    public void shouldDetectNonRefValuesInIsland() {
+        final String[] invalidSosis = new String[]{
+                ".HODE ..REF (:1 ) .SLUTT",
+                ".HODE ..REF (:1 Hei) .SLUTT",
+                ".HODE ..REF (:1 1 ) .SLUTT"
+        };
+
+        assertParsingException(invalidSosis, "Forventede tokens er: [COLON_VALUE,CLOSE_PARENTHESIS]");
     }
 
     @Test
@@ -324,6 +375,7 @@ public class SosiParserImplTest {
     }
 
     private void assertParsingException(String[] invalidSosis, String expectedMessage) {
+        int sosiNo = 1;
         for (String sosi : invalidSosis) {
             try {
                 Reader sosiReader = new StringReader(sosi);
@@ -332,10 +384,11 @@ public class SosiParserImplTest {
                     parser.next();
                 }
 
-                fail("Expected SosiParsingException when parsing SOSI string " + sosi);
+                fail("Expected SosiParsingException when parsing SOSI string " + sosiNo + ": " + sosi);
             } catch (SosiParsingException e) {
-                assertThat(e.getMessage(), containsString(expectedMessage));
+                assertThat("Unexpected parsing exception for SOSI string " + sosiNo, e.getMessage(), containsString(expectedMessage));
             }
+            sosiNo++;
         }
     }
 

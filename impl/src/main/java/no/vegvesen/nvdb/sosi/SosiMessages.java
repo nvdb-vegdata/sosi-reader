@@ -95,6 +95,14 @@ public final class SosiMessages {
         return localize("parser.grammar.levelLeap");
     }
 
+    public static String PARSER_UNMATCHED_PARENTHESIS() {
+        return localize("parser.grammar.unmatchedParenthesis");
+    }
+
+    public static String PARSER_NESTED_PARENTHESES() {
+        return localize("parser.grammar.nestedParentheses");
+    }
+
     // writer messages
     public static String WRITER_WRITE_ALREADY_CALLED() {
         return localize("writer.write.already.called");

@@ -10,6 +10,7 @@ import no.vegvesen.nvdb.sosi.SosiLocation;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 /**
@@ -22,13 +23,17 @@ public interface SosiElement {
 
     SosiLocation getLocation();
 
-    Optional<SosiElement> findSubElement(String name);
+    Optional<SosiElement> findSubElement(Predicate<SosiElement> predicate);
 
-    Optional<SosiElement> findSubElementRecursively(String name);
+    Optional<SosiElement> findSubElementRecursively(Predicate<SosiElement> predicate);
 
-    List<SosiElement> findSubElements(String... names);
+    Stream<SosiElement> findSubElements(Predicate<SosiElement> predicate);
+
+    boolean hasSubElements();
 
     Stream<SosiElement> subElements();
+
+    boolean hasValues();
 
     Stream<SosiValue> values();
 

@@ -76,6 +76,8 @@ public final class SosiTokenizer implements Closeable {
         ASTERISK(Event.VALUE_UNSPECIFIED, false), // *
         AT_MARK(Event.VALUE_DEFAULT, false),      // @
         AMPERSAND(Event.CONCATENATION, false),    // &
+        OPEN_PARENTHESIS(Event.START_REF_ISLAND, false), // (
+        CLOSE_PARENTHESIS(Event.END_REF_ISLAND, false), // )
         COLON_VALUE(Event.VALUE_REF, true),       // :123
         VALUE_COLON(Event.VALUE_SERNO, true),     // 123:
         EOF(null, false);
@@ -180,10 +182,21 @@ public final class SosiTokenizer implements Closeable {
         SosiToken token = SosiToken.VALUE_STRING;
         readString();
 
-        if (buf[storeBegin] == ':' && interpretableAsInteger(storeBegin + 1, storeEnd)) {
+        if (buf[storeBegin] == '(' && buf[storeBegin+1] == ':') {
+            token = SosiToken.OPEN_PARENTHESIS;
+            storeEnd = storeBegin + 1;
+            readBegin = storeBegin + 1;
+        } else if (buf[storeBegin] == ':' && buf[storeEnd - 1] == ')' && interpretableAsSignedInteger(storeBegin + 1, storeEnd - 1)) {
             token = SosiToken.COLON_VALUE;
             storeBegin++;
-        } else if (buf[storeEnd-1] == ':' && interpretableAsInteger(storeBegin, storeEnd - 1)) {
+            storeEnd--;
+            readBegin--;
+        } else if (buf[storeBegin] == ')' && !isWhitespace(buf[storeBegin-1])) {
+            token = SosiToken.CLOSE_PARENTHESIS;
+        } else if (buf[storeBegin] == ':' && interpretableAsSignedInteger(storeBegin + 1, storeEnd)) {
+            token = SosiToken.COLON_VALUE;
+            storeBegin++;
+        } else if (buf[storeEnd-1] == ':' && interpretableAsUnsignedInteger(storeBegin, storeEnd - 1)) {
             token = SosiToken.VALUE_COLON;
             storeEnd--;
         } else if (interpretableAsNumber(storeBegin, storeEnd)) {
@@ -194,12 +207,28 @@ public final class SosiTokenizer implements Closeable {
     }
 
     /**
+     * Tests whether buffer (within given positions) contains an unsigned or signed integer value.
+     * @param from start position in buffer (inclusive)
+     * @param to end position in buffer (exclusive)
+     * @return true if buffer (within given positions) can be interpreted as an unsigned or signed integer value.
+     */
+    private boolean interpretableAsSignedInteger(int from, int to)  {
+        if (isSign(buf[from])) {
+            from++;
+        }
+        return interpretableAsUnsignedInteger(from, to);
+    }
+
+    /**
      * Tests whether buffer (within given positions) contains an unsigned integer value.
      * @param from start position in buffer (inclusive)
      * @param to end position in buffer (exclusive)
      * @return true if buffer (within given positions) can be interpreted as an unsigned integer value.
      */
-    private boolean interpretableAsInteger(int from, int to)  {
+    private boolean interpretableAsUnsignedInteger(int from, int to)  {
+        if (from >= to) {
+            return false;
+        }
         for (int i = from; i < to; i++) {
             if (!isDigit(buf[i])) {
                 return false;

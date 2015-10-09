@@ -48,7 +48,7 @@ class SosiSerialNumberImpl implements SosiSerialNumber {
 
     @Override
     public String getString() {
-        return Long.toString(num);
+        return Long.toString(num) + ":";
     }
 
     @Override

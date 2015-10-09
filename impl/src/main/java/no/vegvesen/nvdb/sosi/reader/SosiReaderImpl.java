@@ -86,6 +86,8 @@ public class SosiReaderImpl implements SosiReader {
 
     private SosiElement readElement(SosiElementBuilder builder) {
         boolean concatenate = false;
+        boolean insideRefIsland = false;
+
         while(parser.hasNext()) {
             SosiParser.Event e = parser.next();
             switch (e) {
@@ -93,6 +95,13 @@ public class SosiReaderImpl implements SosiReader {
                     String name = parser.getString();
                     SosiElement subElement = readElement(new SosiElementBuilderImpl(name, parser.getLocation()));
                     builder.addSubElement(name, subElement);
+                    break;
+                case START_REF_ISLAND:
+                    builder.addValue(SosiRefIslandImpl.of(parser.getLocation()));
+                    insideRefIsland = true;
+                    break;
+                case END_REF_ISLAND:
+                    insideRefIsland = false;
                     break;
                 case VALUE_STRING:
                     if (concatenate) {
@@ -119,7 +128,11 @@ public class SosiReaderImpl implements SosiReader {
                     builder.addValue(SosiSerialNumberImpl.of(parser.getLong(), parser.getLocation()));
                     break;
                 case VALUE_REF:
-                    builder.addValue(SosiRefNumberImpl.of(parser.getLong(), parser.getLocation()));
+                    if (insideRefIsland) {
+                        builder.addIslandValue(SosiRefNumberImpl.of(parser.getLong(), true, parser.getLocation()));
+                    } else {
+                        builder.addValue(SosiRefNumberImpl.of(parser.getLong(), false, parser.getLocation()));
+                    }
                     break;
                 case END_HEAD:
                 case END_ELEMENT:

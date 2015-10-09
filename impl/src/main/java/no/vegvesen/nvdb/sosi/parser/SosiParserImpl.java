@@ -45,6 +45,7 @@ public class SosiParserImpl implements SosiParser {
     private boolean missingOrInvalidCharset = false;
     private boolean headFound = false;
     private boolean endFound = false;
+    private boolean openParenthesisFound = false;
 
     private final Stack stack = new Stack();
     private final StateIterator stateIterator;
@@ -296,6 +297,9 @@ public class SosiParserImpl implements SosiParser {
                 if (previousEvent == Event.CONCATENATION) {
                     throw parsingException(SosiMessages.PARSER_INVALID_CONCATENATION());
                 }
+                if (openParenthesisFound) {
+                    throw parsingException(SosiMessages.PARSER_UNMATCHED_PARENTHESIS());
+                }
                 int nextLevel = tokenValue.length();
                 if (nextLevel > currentLevel) {
                     if (nextLevel > currentLevel + 1) {
@@ -313,18 +317,34 @@ public class SosiParserImpl implements SosiParser {
                     levelsToClose = currentLevel - nextLevel + 1;
                     return getClosingEvent();
                 }
-            } else if (token.isOneOf(SosiToken.EXCLAMATION_MARK, SosiToken.AT_MARK, SosiToken.ASTERISK, SosiToken.AMPERSAND, SosiToken.VALUE_STRING, SosiToken.VALUE_NUMBER, SosiToken.VALUE_COLON, SosiToken.COLON_VALUE)) {
+            } else if (token.isOneOf(SosiToken.EXCLAMATION_MARK, SosiToken.AT_MARK, SosiToken.ASTERISK, SosiToken.AMPERSAND, SosiToken.OPEN_PARENTHESIS, SosiToken.CLOSE_PARENTHESIS, SosiToken.VALUE_STRING, SosiToken.VALUE_NUMBER, SosiToken.VALUE_COLON, SosiToken.COLON_VALUE)) {
                 Event event = token.getEvent();
+                if (openParenthesisFound && event != Event.VALUE_REF && event != Event.END_REF_ISLAND) {
+                    throw parsingException(token, "[COLON_VALUE,CLOSE_PARENTHESIS]");
+                }
                 if (event == Event.CONCATENATION && previousEvent != Event.VALUE_STRING) {
                     throw parsingException(SosiMessages.PARSER_INVALID_CONCATENATION());
                 }
                 if (previousEvent == Event.CONCATENATION && event != Event.VALUE_STRING) {
                     throw parsingException(SosiMessages.PARSER_INVALID_CONCATENATION());
                 }
+                if (event == Event.START_REF_ISLAND) {
+                    if (openParenthesisFound) {
+                        throw parsingException(SosiMessages.PARSER_NESTED_PARENTHESES());
+                    }
+                    openParenthesisFound = true;
+                }
+                if (event == Event.END_REF_ISLAND) {
+                    if (!openParenthesisFound) {
+                        throw parsingException(SosiMessages.PARSER_UNMATCHED_PARENTHESIS());
+                    }
+                    openParenthesisFound = false;
+                }
+
                 return event;
             }
 
-            throw parsingException(token, "[ELEMENT_NAME|LEVEL|EXCLAMATION_MARK|AT_MARK|ASTERISK|AMPERSAND|VALUE_STRING|VALUE_NUMBER|COLON_VALUE|VALUE_COLON|COMMENT]");
+            throw parsingException(token, "[ELEMENT_NAME|LEVEL|EXCLAMATION_MARK|AT_MARK|ASTERISK|AMPERSAND|OPEN_PARENTHESIS|CLOSE_PARENTHESIS|VALUE_STRING|VALUE_NUMBER|COLON_VALUE|VALUE_COLON|COMMENT]");
         }
 
         private Event getClosingEvent() {

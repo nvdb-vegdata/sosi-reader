@@ -14,7 +14,7 @@ import java.util.Arrays;
 /**
  * Provides forward, read-only access to SOSI data in a streaming way. This
  * is the most efficient way for reading SOSI data. The class
- * {@link Ino.vegvesen.nvdb.sosi.Sosi} contains methods to create parsers from input
+ * {@link no.vegvesen.nvdb.sosi.Sosi} contains methods to create parsers from input
  * sources ({@link java.io.InputStream} and {@link java.io.Reader}).
  *
  * <p>
@@ -93,6 +93,15 @@ public interface SosiParser extends /*Auto*/Closeable {
          */
         COMMENT,
         /**
+         * Start of an island of reference values. Reference islands represents geometry to be subtracted
+         * from a surface i.e. uncovered islands in the surface.
+         */
+        START_REF_ISLAND,
+        /**
+         * End of an island of reference values.
+         */
+        END_REF_ISLAND,
+        /**
          * String value in a SOSI element. The position of the parser is after the value.
          * The method {@link #getString} returns the value as a string.
          */
@@ -120,6 +129,7 @@ public interface SosiParser extends /*Auto*/Closeable {
          * The method {@link #getString} returns the reference as a string.
          */
         VALUE_REF,
+
         /**
          * Concatenation marker (&) between two string values in a SOSI element. The position of the parser is after the value.
          */
