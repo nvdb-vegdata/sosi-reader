@@ -7,6 +7,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
+import java.math.BigDecimal;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
@@ -74,6 +75,8 @@ public class SosiParserImplTest {
         final EventValue[] expectedEvents = new EventValue[]{
                 ev(START_HEAD, "HODE"),
                 ev(START_ELEMENT, "VERDI"),
+                ev(VALUE_NUMBER, "3D2"),
+                ev(VALUE_NUMBER, "-12.3e+45"),
                 ev(VALUE_STRING, "-12.3e45xxx"),
                 ev(VALUE_NUMBER, "-12.3e45"),
                 ev(VALUE_NUMBER, "-12.3e-4"),
@@ -407,6 +410,11 @@ public class SosiParserImplTest {
             if (expected.hasValue()) {
                 String value = parser.getString();
                 assertThat("Wrong event value for event no " + eventNo, value, is(expected.getValue()));
+
+                // Verify that number value can be parsed as number
+                if (event.isOneOf(VALUE_NUMBER)) {
+                    parser.getBigDecimal();
+                }
             }
             eventNo++;
         }

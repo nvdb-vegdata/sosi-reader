@@ -456,7 +456,9 @@ public final class SosiTokenizer implements Closeable {
 
     BigDecimal getBigDecimal() {
         if (isNull(bd)) {
-            bd = new BigDecimal(buf, storeBegin, storeEnd-storeBegin);
+            String valueAsString = new String(buf, storeBegin, storeEnd - storeBegin);
+            valueAsString = valueAsString.replace('d', 'e').replace('D', 'E');
+            bd = new BigDecimal(valueAsString);
         }
         return bd;
     }
