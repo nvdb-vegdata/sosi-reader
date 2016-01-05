@@ -10,18 +10,18 @@
     <packaging>pom</packaging>
 
     <scm>
-        <connection>scm:git:https://github.com/nvdb-opensource/sosi-reader.git</connection>
+        <connection>scm:git:git@github.com:nvdb-opensource/sosi-reader.git</connection>
         <tag>HEAD</tag>
     </scm>
 
     <distributionManagement>
         <snapshotRepository>
             <id>kantega-snapshots</id>
-            <url>http://opensource.kantega.no/nexus/content/repositories/snapshots</url>
+            <url>http://nexus.kantega.lan/content/repositories/snapshots</url>
         </snapshotRepository>
         <repository>
             <id>kantega-releases</id>
-            <url>http://opensource.kantega.no/nexus/content/repositories/releases</url>
+            <url>http://nexus.kantega.lan/content/repositories/releases</url>
         </repository>
     </distributionManagement>
 
