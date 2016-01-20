@@ -8,6 +8,8 @@ package no.vegvesen.nvdb.sosi.reader;
 import no.vegvesen.nvdb.sosi.document.SosiRefNumber;
 import no.vegvesen.nvdb.sosi.SosiLocation;
 
+import java.util.Objects;
+
 /**
  * Implements a SOSI reference number.
  *
@@ -16,14 +18,16 @@ import no.vegvesen.nvdb.sosi.SosiLocation;
 class SosiRefNumberImpl implements SosiRefNumber {
     private final long num;
     private final boolean insideIsland;
+    private final boolean reversedOrder;
     private final SosiLocation location;
 
-    static SosiRefNumber of(long num, boolean island, SosiLocation location) {
-        return new SosiRefNumberImpl(num, island, location);
+    static SosiRefNumber of(long num, boolean insideIsland, SosiLocation location) {
+        return new SosiRefNumberImpl(num, insideIsland, location);
     }
 
     SosiRefNumberImpl(long num, boolean insideIsland, SosiLocation location) {
-        this.num = num;
+        this.num = Math.abs(num);
+        this.reversedOrder = num < 0;
         this.insideIsland = insideIsland;
         this.location = location;
     }
@@ -32,6 +36,12 @@ class SosiRefNumberImpl implements SosiRefNumber {
     public boolean isInsideIsland() {
         return insideIsland;
     }
+
+    @Override
+    public boolean isReversedOrder() {
+        return reversedOrder;
+    }
+
     @Override
     public long longValue() {
         return num;
@@ -54,7 +64,7 @@ class SosiRefNumberImpl implements SosiRefNumber {
 
     @Override
     public String getString() {
-        return ":" + Long.toString(num);
+        return ":" + (reversedOrder ? "-" : "") + Long.toString(num);
     }
 
     @Override
@@ -68,11 +78,13 @@ class SosiRefNumberImpl implements SosiRefNumber {
             return false;
         }
         SosiRefNumber other = (SosiRefNumber)obj;
-        return longValue() == other.longValue();
+        return num == other.longValue() &&
+               insideIsland == other.isInsideIsland() &&
+               reversedOrder == other.isReversedOrder();
     }
 
     @Override
     public int hashCode() {
-        return Long.hashCode(longValue());
+        return Objects.hash(num, insideIsland, reversedOrder);
     }
 }

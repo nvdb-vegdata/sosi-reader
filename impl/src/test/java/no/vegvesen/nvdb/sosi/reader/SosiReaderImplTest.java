@@ -100,14 +100,22 @@ public class SosiReaderImplTest {
         assertThat(flate11RefValues, hasSize(3));
         assertThat(flate11RefValues.get(0), instanceOf(SosiRefNumber.class));
         assertThat(((SosiRefNumber)flate11RefValues.get(0)).longValue(), equalTo(1L));
+        assertThat(((SosiRefNumber)flate11RefValues.get(0)).isInsideIsland(), is(false));
         assertThat(flate11RefValues.get(1), instanceOf(SosiRefIsland.class));
         assertThat(flate11RefValues.get(2), instanceOf(SosiRefNumber.class));
         assertThat(((SosiRefNumber)flate11RefValues.get(2)).longValue(), equalTo(5L));
+        assertThat(((SosiRefNumber)flate11RefValues.get(2)).isInsideIsland(), is(false));
         List<SosiRefNumber> flate11RefIslandRefNos = ((SosiRefIsland)flate11RefValues.get(1)).refNumbers().collect(toList());
         assertThat(flate11RefIslandRefNos, hasSize(3));
         assertThat(flate11RefIslandRefNos.get(0).longValue(), equalTo(2L));
-        assertThat(flate11RefIslandRefNos.get(1).longValue(), equalTo(-3L));
+        assertThat(flate11RefIslandRefNos.get(0).isInsideIsland(), is(true));
+        assertThat(flate11RefIslandRefNos.get(0).isReversedOrder(), is(false));
+        assertThat(flate11RefIslandRefNos.get(1).longValue(), equalTo(3L));
+        assertThat(flate11RefIslandRefNos.get(1).isInsideIsland(), is(true));
+        assertThat(flate11RefIslandRefNos.get(1).isReversedOrder(), is(true));
         assertThat(flate11RefIslandRefNos.get(2).longValue(), equalTo(4L));
+        assertThat(flate11RefIslandRefNos.get(2).isInsideIsland(), is(true));
+        assertThat(flate11RefIslandRefNos.get(2).isReversedOrder(), is(false));
 
         // FLATE 12: ..REF :1 (:2) :-3 (:4) :-5
         SosiElement flate12 = doc.findElement(hasName("FLATE").and(hasSerialNumber(12))).get();
@@ -118,15 +126,19 @@ public class SosiReaderImplTest {
         assertThat(((SosiRefNumber)flate12RefValues.get(0)).longValue(), equalTo(1L));
         assertThat(flate12RefValues.get(1), instanceOf(SosiRefIsland.class));
         assertThat(flate12RefValues.get(2), instanceOf(SosiRefNumber.class));
-        assertThat(((SosiRefNumber)flate12RefValues.get(2)).longValue(), equalTo(-3L));
+        assertThat(((SosiRefNumber)flate12RefValues.get(2)).longValue(), equalTo(3L));
+        assertThat(((SosiRefNumber)flate12RefValues.get(2)).isReversedOrder(), is(true));
         assertThat(flate12RefValues.get(3), instanceOf(SosiRefIsland.class));
         assertThat(flate12RefValues.get(4), instanceOf(SosiRefNumber.class));
-        assertThat(((SosiRefNumber)flate12RefValues.get(4)).longValue(), equalTo(-5L));
+        assertThat(((SosiRefNumber)flate12RefValues.get(4)).longValue(), equalTo(5L));
+        assertThat(((SosiRefNumber)flate12RefValues.get(4)).isReversedOrder(), is(true));
         List<SosiRefNumber> flate12RefIsland1RefNos = ((SosiRefIsland)flate12RefValues.get(1)).refNumbers().collect(toList());
         assertThat(flate12RefIsland1RefNos, hasSize(1));
         assertThat(flate12RefIsland1RefNos.get(0).longValue(), equalTo(2L));
+        assertThat(flate12RefIsland1RefNos.get(0).isInsideIsland(), is(true));
         List<SosiRefNumber> flate12RefIsland2RefNos = ((SosiRefIsland)flate12RefValues.get(3)).refNumbers().collect(toList());
         assertThat(flate12RefIsland2RefNos, hasSize(1));
         assertThat(flate12RefIsland2RefNos.get(0).longValue(), equalTo(4L));
+        assertThat(flate12RefIsland2RefNos.get(0).isInsideIsland(), is(true));
     }
 }

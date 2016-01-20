@@ -14,6 +14,8 @@ package no.vegvesen.nvdb.sosi.document;
 public interface SosiRefNumber extends SosiValue{
     boolean isInsideIsland();
 
+    boolean isReversedOrder();
+
     long longValue();
 
     long longValueExact();
