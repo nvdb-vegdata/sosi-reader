@@ -88,8 +88,6 @@ public enum CoordSys {
     int sosiValue; // Value used for KOORDSYS (SYSKODE) in SOSI files
     int srid;
 
-    public static final int NO_SRID = -1;
-
     public static CoordSys fromSosiValue(int sosiValue) {
         return Arrays.stream(CoordSys.values())
                 .filter(cs -> cs.sosiValue == sosiValue)
@@ -107,5 +105,13 @@ public enum CoordSys {
     CoordSys(int sosiValue, int srid) {
         this.sosiValue = sosiValue;
         this.srid = srid;
+    }
+
+    public int getSosiValue() {
+        return sosiValue;
+    }
+
+    public int getSrid() {
+        return srid;
     }
 }
