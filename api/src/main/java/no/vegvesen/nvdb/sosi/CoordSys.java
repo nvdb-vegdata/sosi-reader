@@ -111,6 +111,10 @@ public enum CoordSys {
         return sosiValue;
     }
 
+    public boolean hasSrid() {
+        return srid > 0;
+    }
+
     public int getSrid() {
         return srid;
     }
