@@ -6,6 +6,7 @@
 package no.vegvesen.nvdb.sosi;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 /**
  * Defines coordinate reference systems as used with the KOORDSYS (SYSKODE) element in SOSI files
@@ -111,11 +112,7 @@ public enum CoordSys {
         return sosiValue;
     }
 
-    public boolean hasSrid() {
-        return srid > 0;
-    }
-
-    public int getSrid() {
-        return srid;
+    public Optional<Integer> getSrid() {
+        return srid > 0 ? Optional.of(srid) : Optional.empty();
     }
 }
