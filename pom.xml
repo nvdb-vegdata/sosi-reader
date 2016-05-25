@@ -10,7 +10,7 @@
     <packaging>pom</packaging>
 
     <scm>
-        <connection>scm:git:git@github.com:nvdb-opensource/sosi-reader.git</connection>
+        <connection>scm:git:git@github.com:nvdb-vegdata/sosi-reader.git</connection>
         <tag>HEAD</tag>
     </scm>
 
