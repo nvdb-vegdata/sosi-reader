@@ -44,13 +44,13 @@ import static java.util.Objects.isNull;
  *
  * @author Tore Eide Andersen (Kantega AS)
  */
-class SosiElementBuilderImpl implements SosiElementBuilder {
+public class SosiElementBuilderImpl implements SosiElementBuilder {
     private final String name;
     private final SosiLocation location;
     private List<SosiElement> subElements;
     private List<SosiValue> values;
 
-    SosiElementBuilderImpl(String name, SosiLocation location) {
+    public SosiElementBuilderImpl(String name, SosiLocation location) {
         this.name = name;
         this.location = location;
     }
