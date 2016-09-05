@@ -122,6 +122,7 @@ public class SosiReaderImplTest {
         // FLATE 11: ..REF :1 (:2 :-3 :4) :5
         SosiElement flate11 = doc.findElement(hasName("FLATE").and(hasSerialNumber(11))).get();
         SosiElement flate11Ref = flate11.findSubElement(hasName("REF")).get();
+
         List<SosiValue> flate11RefValues = flate11Ref.values().collect(toList());
         assertThat(flate11RefValues, hasSize(3));
         assertThat(flate11RefValues.get(0), instanceOf(SosiRefNumber.class));
@@ -131,6 +132,7 @@ public class SosiReaderImplTest {
         assertThat(flate11RefValues.get(2), instanceOf(SosiRefNumber.class));
         assertThat(((SosiRefNumber)flate11RefValues.get(2)).longValue(), equalTo(5L));
         assertThat(((SosiRefNumber)flate11RefValues.get(2)).isInsideIsland(), is(false));
+
         List<SosiRefNumber> flate11RefIslandRefNos = ((SosiRefIsland)flate11RefValues.get(1)).refNumbers().collect(toList());
         assertThat(flate11RefIslandRefNos, hasSize(3));
         assertThat(flate11RefIslandRefNos.get(0).longValue(), equalTo(2L));
@@ -146,6 +148,7 @@ public class SosiReaderImplTest {
         // FLATE 12: ..REF :1 (:2) :-3 (:4) :-5
         SosiElement flate12 = doc.findElement(hasName("FLATE").and(hasSerialNumber(12))).get();
         SosiElement flate12Ref = flate12.findSubElement(hasName("REF")).get();
+
         List<SosiValue> flate12RefValues = flate12Ref.values().collect(toList());
         assertThat(flate12RefValues, hasSize(5));
         assertThat(flate12RefValues.get(0), instanceOf(SosiRefNumber.class));
@@ -158,13 +161,27 @@ public class SosiReaderImplTest {
         assertThat(flate12RefValues.get(4), instanceOf(SosiRefNumber.class));
         assertThat(((SosiRefNumber)flate12RefValues.get(4)).longValue(), equalTo(5L));
         assertThat(((SosiRefNumber)flate12RefValues.get(4)).isReversedOrder(), is(true));
+
         List<SosiRefNumber> flate12RefIsland1RefNos = ((SosiRefIsland)flate12RefValues.get(1)).refNumbers().collect(toList());
         assertThat(flate12RefIsland1RefNos, hasSize(1));
         assertThat(flate12RefIsland1RefNos.get(0).longValue(), equalTo(2L));
         assertThat(flate12RefIsland1RefNos.get(0).isInsideIsland(), is(true));
+
         List<SosiRefNumber> flate12RefIsland2RefNos = ((SosiRefIsland)flate12RefValues.get(3)).refNumbers().collect(toList());
         assertThat(flate12RefIsland2RefNos, hasSize(1));
         assertThat(flate12RefIsland2RefNos.get(0).longValue(), equalTo(4L));
         assertThat(flate12RefIsland2RefNos.get(0).isInsideIsland(), is(true));
+    }
+
+    @Test
+    public void shouldReadUtf8WithBom() {
+        byte[] sosiBytes = streamToBytes(getResource("valid_utf8_with_bom.sos"), 2048);
+        Optional<Charset> charset = SosiEncoding.charsetOf(sosiBytes);
+        assertThat(charset.isPresent(), is(true));
+        assertThat(charset.get().name(), equalTo("UTF-8"));
+
+        SosiReader reader = Sosi.createReader(getResource("valid_utf8_with_bom.sos"));
+        SosiDocument doc = reader.read();
+        assertThat(doc.findElementRecursively(hasName("ORIGO-NØ")).isPresent(), is(true));
     }
 }

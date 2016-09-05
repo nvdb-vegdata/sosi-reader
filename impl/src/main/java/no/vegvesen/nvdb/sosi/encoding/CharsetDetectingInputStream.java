@@ -41,6 +41,8 @@ import java.util.Optional;
 public class CharsetDetectingInputStream extends FilterInputStream {
     private static final int BUF_SIZE = 1024;
 
+    private static final byte[] UTF8_BOM = {(byte)0xEF, (byte)0xBB, (byte)0xBF};
+
     private final byte[] buf = new byte[BUF_SIZE];
     private int bufLen;
     private int curIndex = 0;
@@ -57,7 +59,23 @@ public class CharsetDetectingInputStream extends FilterInputStream {
 
     private Optional<Charset> detectEncoding() {
         fillBuf();
-        return SosiEncoding.charsetOf(buf);
+        Optional<Charset> charset = charsetFromBom();
+        if (charset.isPresent()) {
+            return charset;
+        } else {
+            return SosiEncoding.charsetOf(buf);
+        }
+    }
+
+    private Optional<Charset> charsetFromBom() {
+        if (bufLen > UTF8_BOM.length) {
+            if (buf[0] == UTF8_BOM[0] && buf[1] == UTF8_BOM[1] && buf[2] == UTF8_BOM[2]) {
+                curIndex += UTF8_BOM.length;
+                return Optional.of(Charset.forName("UTF-8"));
+            }
+        }
+
+        return Optional.empty();
     }
 
     private void fillBuf() {
