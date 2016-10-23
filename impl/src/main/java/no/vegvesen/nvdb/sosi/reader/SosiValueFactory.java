@@ -27,6 +27,7 @@ package no.vegvesen.nvdb.sosi.reader;
 
 import no.vegvesen.nvdb.sosi.SosiLocation;
 import no.vegvesen.nvdb.sosi.document.SosiNumber;
+import no.vegvesen.nvdb.sosi.document.SosiRefIsland;
 import no.vegvesen.nvdb.sosi.document.SosiRefNumber;
 import no.vegvesen.nvdb.sosi.document.SosiSerialNumber;
 import no.vegvesen.nvdb.sosi.document.SosiString;
@@ -149,5 +150,26 @@ public class SosiValueFactory {
      */
     public static SosiRefNumber refNo(long refNo) {
         return refNo(refNo, SosiLocation.unknown());
+    }
+
+    /**
+     * Creates a SosiValue holding a reference island containing a single reference number.
+     * @param refNo the reference island value
+     * @param location the location of the value inside the SOSI file
+     * @return a SosiValue instance
+     */
+    public static SosiRefIsland refIsland(long refNo, SosiLocation location) {
+        SosiRefIslandImpl value = new SosiRefIslandImpl(location);
+        value.addRefNumber(SosiRefNumberImpl.of(refNo, true, location));
+        return value;
+    }
+
+    /**
+     * Creates a SosiValue holding a reference island containing a single reference number.
+     * @param refNo the reference island value
+     * @return a SosiValue instance
+     */
+    public static SosiRefIsland refIsland(long refNo) {
+        return refIsland(refNo, SosiLocation.unknown());
     }
 }
