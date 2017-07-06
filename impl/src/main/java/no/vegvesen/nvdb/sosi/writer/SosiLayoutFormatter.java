@@ -43,6 +43,13 @@ public interface SosiLayoutFormatter {
     String beforeValue(SosiValue value);
 
     /**
+     * The string to append a value in the SOSI file.
+     * @param value the value to be appended
+     * @return the prepend text
+     */
+    String afterValue(SosiValue value);
+
+    /**
      * The string to prepend an element in the SOSI file.
      * @param element the element to be prepended
      * @return the prepend text
