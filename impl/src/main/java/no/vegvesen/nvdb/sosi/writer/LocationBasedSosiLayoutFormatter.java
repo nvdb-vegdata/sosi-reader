@@ -63,6 +63,20 @@ public class LocationBasedSosiLayoutFormatter implements SosiLayoutFormatter {
      * {@inheritDoc}
      */
     @Override
+    public String afterValue(SosiValue value) {
+        if (value.getValueType() == SosiValue.ValueType.STRING) {
+            // Line breaks are represented by concatenations on different lines (using &)
+            long numLinebreaks = value.getString().chars().filter(c -> c == '\n').count();
+            lineNo += numLinebreaks;
+        }
+
+        return "";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public String beforeElement(SosiElement element) {
         elementNo++;
         StringBuilder sb = new StringBuilder();

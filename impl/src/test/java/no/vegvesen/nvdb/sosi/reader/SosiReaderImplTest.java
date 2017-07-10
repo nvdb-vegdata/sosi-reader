@@ -115,6 +115,18 @@ public class SosiReaderImplTest {
     }
 
     @Test
+    public void shouldAddLinebreaksWhenConcatenatingOnDifferentLines() {
+        SosiReader reader = Sosi.createReader(getResource("valid_string_concat_on_different_lines.sos"));
+        SosiDocument doc = reader.read();
+
+        SosiElement stringEl = doc.findElementRecursively(hasName("STRENG")).orElseThrow(() -> new IllegalStateException("STRENG element not found"));
+        List<SosiValue> stringValues = stringEl.values().collect(toList());
+
+        assertThat(stringValues, hasSize(1));
+        assertThat(stringValues.get(0).getString(), is("Linje1\nLinje2\nLinje3"));
+    }
+
+    @Test
     public void shouldHandleRefIslands() {
         SosiReader reader = Sosi.createReader(getResource("valid_with_island_refs.sos"));
         SosiDocument doc = reader.read();

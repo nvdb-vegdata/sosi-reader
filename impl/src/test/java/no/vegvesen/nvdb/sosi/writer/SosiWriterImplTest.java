@@ -53,7 +53,12 @@ public class SosiWriterImplTest {
 
     @Test
     public void shouldWriteSameAsRead() {
-        String[] files = new String[]{"valid_no_comments.sos", "valid_real_data.sos", "valid_with_island_refs.sos"};
+        String[] files = new String[]{
+                //"valid_no_comments.sos",
+                //"valid_real_data.sos",
+                //"valid_with_island_refs.sos",
+                "valid_string_concat_on_different_lines.sos"
+        };
 
         for (String file : files) {
             SosiDocument doc = readSosiResource(file);

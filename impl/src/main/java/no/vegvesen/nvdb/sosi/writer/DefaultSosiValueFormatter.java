@@ -28,6 +28,9 @@ package no.vegvesen.nvdb.sosi.writer;
 import no.vegvesen.nvdb.sosi.document.SosiElement;
 import no.vegvesen.nvdb.sosi.document.SosiValue;
 
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.joining;
 import static no.vegvesen.nvdb.sosi.document.SosiValue.ValueType.REF;
 import static no.vegvesen.nvdb.sosi.document.SosiValue.ValueType.SERNO;
 import static no.vegvesen.nvdb.sosi.document.SosiValue.ValueType.STRING;
@@ -44,14 +47,26 @@ public class DefaultSosiValueFormatter implements SosiValueFormatter {
      */
     @Override
     public String apply(SosiElement element, SosiValue value) {
-        if (value.getValueType() == STRING && containsWhitespace(value.getString())) {
-            return "\"" + value.getString() + "\"";
+
+        if (value.getValueType() == STRING && containsLinebreak(value.getString())) {
+            String[] valueLines = value.getString().split("\n");
+            return Stream.of(valueLines).map(this::quote).collect(joining(" &\n"));
+        } else if (value.getValueType() == STRING && containsWhitespace(value.getString())) {
+            return quote(value.getString());
         } else {
             return value.getString();
         }
     }
 
+    private boolean containsLinebreak(String value) {
+        return value.contains("\n");
+    }
+
     private boolean containsWhitespace(String value) {
         return !value.matches("^\\S*$");
+    }
+
+    private String quote(String value) {
+        return "\"" + value + "\"";
     }
 }

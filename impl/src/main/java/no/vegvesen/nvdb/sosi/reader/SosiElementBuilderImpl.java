@@ -157,7 +157,13 @@ public class SosiElementBuilderImpl implements SosiElementBuilder {
             throw new IllegalArgumentException("Concatenation supported for SosiString values only");
         }
 
-        SosiValue newValue = SosiStringImpl.of(lastValue.getString() + value.getString(), lastValue.getLocation());
+        // Strings concatenated over two lines implies line break
+        String delimiter = "";
+        if (lastValue.getLocation().getLineNumber() < value.getLocation().getLineNumber()) {
+            delimiter = "\n";
+        }
+
+        SosiValue newValue = SosiStringImpl.of(lastValue.getString() + delimiter + value.getString(), lastValue.getLocation());
         values.set(values.size() - 1, newValue);
     }
 
