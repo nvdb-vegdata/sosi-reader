@@ -16,11 +16,11 @@
 
     <distributionManagement>
         <snapshotRepository>
-            <id>kantega-snapshots</id>
+            <id>opensource.kantega.no</id>
             <url>http://opensource.kantega.no/nexus/content/repositories/snapshots</url>
         </snapshotRepository>
         <repository>
-            <id>kantega-releases</id>
+            <id>opensource.kantega.no</id>
             <url>http://opensource.kantega.no/nexus/content/repositories/releases</url>
         </repository>
     </distributionManagement>
