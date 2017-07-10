@@ -92,14 +92,14 @@ public final class SosiTokenizer implements Closeable {
         ELEMENT_NAME(null, true),
         VALUE_NUMBER(Event.VALUE_NUMBER, true),
         VALUE_STRING(Event.VALUE_STRING, true),
-        EXCLAMATION_MARK(Event.COMMENT, true),    // !
-        ASTERISK(Event.VALUE_UNSPECIFIED, false), // *
-        AT_MARK(Event.VALUE_DEFAULT, false),      // @
-        AMPERSAND(Event.CONCATENATION, false),    // &
+        EXCLAMATION_MARK(Event.COMMENT, true),           // !
+        ASTERISK(Event.VALUE_UNSPECIFIED, false),        // *
+        AT_MARK(Event.VALUE_DEFAULT, false),             // @
+        AMPERSAND(Event.CONCATENATION, false),           // &
         OPEN_PARENTHESIS(Event.START_REF_ISLAND, false), // (
-        CLOSE_PARENTHESIS(Event.END_REF_ISLAND, false), // )
-        COLON_VALUE(Event.VALUE_REF, true),       // :123
-        VALUE_COLON(Event.VALUE_SERNO, true),     // 123:
+        CLOSE_PARENTHESIS(Event.END_REF_ISLAND, false),  // )
+        COLON_VALUE(Event.VALUE_REF, true),              // :123
+        VALUE_COLON(Event.VALUE_SERNO, true),            // 123:
         EOF(null, false);
 
         private final SosiParser.Event event;
@@ -169,16 +169,19 @@ public final class SosiTokenizer implements Closeable {
             ch = readChar();
             if (ch == -1) {
                 throw expectedChar(-1, (char)quotationMark);
+            } else if (ch == 0x0a || ch == 0x0d) {
+                // Line break always terminates a quoted string
+                endOfString = true;
             }
             if (ch == quotationMark && prevCh == quotationMark) {
                 // Escaped quotation mark should be part of string
                 ch = prevCh = -1;
             } else if (ch != quotationMark && prevCh == quotationMark) {
+                readBegin--;
                 endOfString = true;
             }
         } while (!endOfString);
 
-        readBegin--;
         storeEnd = readBegin-1;
     }
 

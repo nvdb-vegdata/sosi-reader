@@ -94,6 +94,7 @@ public class SosiWriterImpl implements SosiWriter {
             writer.append(layoutFormatter.beforeValue(value));
             String valueAsString = valueFormatter.apply(element, value);
             writer.append(valueAsString);
+            writer.append(layoutFormatter.afterValue(value));
         } catch (IOException e) {
             throw new RuntimeException("Failed to write value", e);
         }

@@ -386,6 +386,41 @@ public class SosiParserImplTest {
         }
     }
 
+    @Test
+    public void shouldAcceptNonTerminatedQuotedStringWithLinebreak() {
+        final EventValue[] expectedEvents = new EventValue[]{
+                ev(START_HEAD, "HODE"),
+                ev(START_ELEMENT, "FORNAVN"),
+                ev(VALUE_STRING, "Tore\""),
+                ev(END_ELEMENT),
+                ev(START_ELEMENT, "MELLOMNAVN"),
+                ev(VALUE_STRING, "Eide'"),
+                ev(END_ELEMENT),
+                ev(START_ELEMENT, "ETTERNAVN"),
+                ev(VALUE_STRING, "Andersen"),
+                ev(END_ELEMENT),
+                ev(END_HEAD),
+                ev(END)
+        };
+
+        assertEventSequence("valid_nonterminated_quoted_string.sos", expectedEvents);
+    }
+
+    @Test
+    public void shouldRejectNonTerminatedQuotedStringWithoutLinebreak() {
+        final String[] invalidSingleQuoteStrings = new String[]{
+                ".HODE ..VERDI 'Slutter aldri .SLUTT",
+                ".HODE ..VERDI 'Slutter aldri'' .SLUTT"
+        };
+        final String[] invalidDoubleQuoteStrings = new String[]{
+                ".HODE ..VERDI \"Slutter aldri .SLUTT",
+                ".HODE ..VERDI \"Slutter aldri\"\" .SLUTT"
+        };
+
+        assertParsingException(invalidSingleQuoteStrings, "expecting '''");
+        assertParsingException(invalidDoubleQuoteStrings, "expecting '\"'");
+    }
+
     private byte[] asByteArray(int... values) {
         byte[] bytes = new byte[values.length];
         for (int i = 0; i < values.length; i++) {
