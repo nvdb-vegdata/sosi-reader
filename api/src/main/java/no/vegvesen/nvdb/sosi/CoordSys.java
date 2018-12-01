@@ -106,8 +106,8 @@ public enum CoordSys {
     EUREF89_NTM29(229, 5129), // Norsk Transversal Mercator sone 29 (basert på EUREF89) EPSG 5129
     EUREF89_NTM30(230, 5130); // Norsk Transversal Mercator sone 30 (basert på EUREF89) EPSG 5130
 
-    int sosiValue; // Value used for KOORDSYS (SYSKODE) in SOSI files
-    int srid;
+    final int sosiValue; // Value used for KOORDSYS (SYSKODE) in SOSI files
+    final int srid;
 
     public static CoordSys fromSosiValue(int sosiValue) {
         return Arrays.stream(CoordSys.values())

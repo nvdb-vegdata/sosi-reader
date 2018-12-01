@@ -26,9 +26,6 @@
 package no.vegvesen.nvdb.sosi.writer;
 
 import no.vegvesen.nvdb.sosi.document.SosiDocument;
-import no.vegvesen.nvdb.sosi.parser.SosiParser;
-
-import java.io.Closeable;
 
 /**
  * Writes a SOSI {@link SosiDocument object} to an output source.
@@ -49,7 +46,7 @@ import java.io.Closeable;
  *
  * @author Tore Eide Andersen (Kantega AS)
  */
-public interface SosiWriter extends  /*Auto*/Closeable {
+public interface SosiWriter extends  AutoCloseable {
     /**
      * Writes specified SOSI document to an OutputStream.
      **/

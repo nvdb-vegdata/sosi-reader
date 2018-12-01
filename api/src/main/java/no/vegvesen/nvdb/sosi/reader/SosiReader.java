@@ -52,17 +52,17 @@ import java.io.Closeable;
  *
  * @author Tore Eide Andersen (Kantega AS)
  */
-public interface SosiReader extends  /*Auto*/Closeable {
+public interface SosiReader extends  AutoCloseable {
     /**
      * Returns a SOSI document that is represented in
      * the input source. This method needs to be called
      * only once for a reader instance.
      *
      * @return a SOSI document
-     * @throws Ino.vegvesen.nvdb.sosi.SosiException if a SOSI document cannot
+     * @throws no.vegvesen.nvdb.sosi.SosiException if a SOSI document cannot
      *     be created due to i/o error (IOException would be
      * cause of SosiException)
-     * @throws Ino.vegvesen.nvdb.sosi.parser.SosiParsingException if a SOSI document
+     * @throws no.vegvesen.nvdb.sosi.parser.SosiParsingException if a SOSI document
      *     cannot be created due to incorrect representation
      * @throws IllegalStateException if read or close method is already called
      */
@@ -78,7 +78,7 @@ public interface SosiReader extends  /*Auto*/Closeable {
      * Closes this reader and frees any resources associated with the
      * reader. This method closes the underlying input source.
      *
-     * @throws Ino.vegvesen.nvdb.sosi.SosiException if an i/o error occurs (IOException would be
+     * @throws no.vegvesen.nvdb.sosi.SosiException if an i/o error occurs (IOException would be
      * cause of SosiException)
      */
     @Override
