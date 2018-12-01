@@ -35,8 +35,8 @@ import java.util.Map;
  */
 public class BiMap<P, Q> {
 
-    Map<P, Q> right = new HashMap<>();
-    Map<Q, P> left = new HashMap<>();
+    private final Map<P, Q> right = new HashMap<>();
+    private final Map<Q, P> left = new HashMap<>();
 
     public void put(P left, Q right) {
         this.right.put(left, right);

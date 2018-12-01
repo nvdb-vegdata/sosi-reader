@@ -28,9 +28,6 @@ package no.vegvesen.nvdb.sosi.writer;
 import no.vegvesen.nvdb.sosi.document.SosiElement;
 import no.vegvesen.nvdb.sosi.document.SosiValue;
 
-import java.util.Arrays;
-import java.util.stream.Stream;
-
 
 /**
  * Implements a layout formatter that prints a single element (plus its values) on each line

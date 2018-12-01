@@ -28,11 +28,10 @@ package no.vegvesen.nvdb.sosi.writer;
 import no.vegvesen.nvdb.sosi.document.SosiElement;
 import no.vegvesen.nvdb.sosi.document.SosiValue;
 
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.joining;
-import static no.vegvesen.nvdb.sosi.document.SosiValue.ValueType.REF;
-import static no.vegvesen.nvdb.sosi.document.SosiValue.ValueType.SERNO;
 import static no.vegvesen.nvdb.sosi.document.SosiValue.ValueType.STRING;
 
 /**
@@ -62,8 +61,9 @@ public class DefaultSosiValueFormatter implements SosiValueFormatter {
         return value.contains("\n");
     }
 
+    private static final Pattern whitespace = Pattern.compile("^\\S*$");
     private boolean containsWhitespace(String value) {
-        return !value.matches("^\\S*$");
+        return !whitespace.matcher(value).matches();
     }
 
     private String quote(String value) {
