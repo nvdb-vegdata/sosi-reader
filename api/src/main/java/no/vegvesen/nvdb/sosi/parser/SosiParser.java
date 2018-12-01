@@ -85,7 +85,7 @@ import java.util.Arrays;
  *
  * @author Tore Eide Andersen (Kantega AS)
  */
-public interface SosiParser extends /*Auto*/Closeable {
+public interface SosiParser extends AutoCloseable {
 
     /**
      * An event from {@code SosiParser}.

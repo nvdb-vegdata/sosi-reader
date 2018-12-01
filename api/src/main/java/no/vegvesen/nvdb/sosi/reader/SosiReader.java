@@ -28,12 +28,10 @@ package no.vegvesen.nvdb.sosi.reader;
 import no.vegvesen.nvdb.sosi.document.SosiDocument;
 import no.vegvesen.nvdb.sosi.parser.SosiParser;
 
-import java.io.Closeable;
-
 /**
  * Reads a SOSI {@link SosiDocument object} from an input source.
  *
- * <p>The class {@link Ino.vegvesen.nvdb.sosi.Sosi} contains methods to create readers from
+ * <p>The class {@link no.vegvesen.nvdb.sosi.Sosi} contains methods to create readers from
  * input sources ({@link java.io.InputStream} and {@link java.io.Reader}).
  *
  * <p>
