@@ -69,6 +69,11 @@ public class SosiWriterImpl implements SosiWriter {
     }
 
     @Override
+    public void write(SosiElement element) {
+        writeElement(1, element);
+    }
+
+    @Override
     public void close() {
         try {
             writer.close();

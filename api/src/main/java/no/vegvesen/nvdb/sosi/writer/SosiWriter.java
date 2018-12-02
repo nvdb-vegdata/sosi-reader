@@ -26,6 +26,7 @@
 package no.vegvesen.nvdb.sosi.writer;
 
 import no.vegvesen.nvdb.sosi.document.SosiDocument;
+import no.vegvesen.nvdb.sosi.document.SosiElement;
 
 /**
  * Writes a SOSI {@link SosiDocument object} to an output source.
@@ -51,6 +52,12 @@ public interface SosiWriter extends  AutoCloseable {
      * Writes specified SOSI document to an OutputStream.
      **/
     void write(SosiDocument doc);
+
+    /**
+     * Writes specified SOSI document element at first level
+     * @param element to write
+     */
+    void write(SosiElement element);
 
     /**
      * Closes this writer and frees any resources associated with the
