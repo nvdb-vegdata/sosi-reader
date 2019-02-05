@@ -35,11 +35,16 @@ import static java.util.Objects.isNull;
  * Base class for all SOSI charsets
  *
  * @author Tore Eide Andersen (Kantega AS)
+ * @author Oystein Steimler (Itema AS)
  */
 public abstract class SosiCharset extends Charset {
 
     public SosiCharset(String canonicalName) {
         super(canonicalName, null);
+    }
+
+    public SosiCharset(String canonicalName, String[] aliases) {
+        super(canonicalName, aliases);
     }
 
     /**

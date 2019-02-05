@@ -30,49 +30,55 @@ import no.vegvesen.nvdb.sosi.utils.BiMap;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * The ISO-8859-10 8-bits character set (includes Sami characters).
  *
  * @author Tore Eide Andersen (Kantega AS)
+ * @author Oystein Steimler (Itema AS)
  */
 public class ISO8859_10 extends SosiCharset {
+
+    private final static String[] aliases = {"ISO8859-10", "8859-10", "latin6"};
+
+    private final static List<Character> chars = Arrays.asList(
+        /* 0xa0 */
+            '\u00a0', '\u0104', '\u0112', '\u0122', '\u012a', '\u0128', '\u0136', '\u00a7',
+            '\u013b', '\u0110', '\u0160', '\u0166', '\u017d', '\u00ad', '\u016a', '\u014a',
+        /* 0xb0 */
+            '\u00b0', '\u0105', '\u0113', '\u0123', '\u012b', '\u0129', '\u0137', '\u00b7',
+            '\u013c', '\u0111', '\u0161', '\u0167', '\u017e', '\u2015', '\u016b', '\u014b',
+        /* 0xc0 */
+            '\u0100', '\u00c1', '\u00c2', '\u00c3', '\u00c4', '\u00c5', '\u00c6', '\u012e',
+            '\u010c', '\u00c9', '\u0118', '\u00cb', '\u0116', '\u00cd', '\u00ce', '\u00cf',
+        /* 0xd0 */
+            '\u00d0', '\u0145', '\u014c', '\u00d3', '\u00d4', '\u00d5', '\u00d6', '\u0168',
+            '\u00d8', '\u0172', '\u00da', '\u00db', '\u00dc', '\u00dd', '\u00de', '\u00df',
+        /* 0xe0 */
+            '\u0101', '\u00e1', '\u00e2', '\u00e3', '\u00e4', '\u00e5', '\u00e6', '\u012f',
+            '\u010d', '\u00e9', '\u0119', '\u00eb', '\u0117', '\u00ed', '\u00ee', '\u00ef',
+        /* 0xf0 */
+            '\u00f0', '\u0146', '\u014d', '\u00f3', '\u00f4', '\u00f5', '\u00f6', '\u0169',
+            '\u00f8', '\u0173', '\u00fa', '\u00fb', '\u00fc', '\u00fd', '\u00fe', '\u0138');
 
     private final static BiMap<Byte, Character> charMap;
 
     static {
-        charMap = createCharMap(0xa0,
-
-        /* 0xa0 */
-                0x00a0, 0x0104, 0x0112, 0x0122, 0x012a, 0x0128, 0x0136, 0x00a7,
-                0x013b, 0x0110, 0x0160, 0x0166, 0x017d, 0x00ad, 0x016a, 0x014a,
-        /* 0xb0 */
-                0x00b0, 0x0105, 0x0113, 0x0123, 0x012b, 0x0129, 0x0137, 0x00b7,
-                0x013c, 0x0111, 0x0161, 0x0167, 0x017e, 0x2015, 0x016b, 0x014b,
-        /* 0xc0 */
-                0x0100, 0x00c1, 0x00c2, 0x00c3, 0x00c4, 0x00c5, 0x00c6, 0x012e,
-                0x010c, 0x00c9, 0x0118, 0x00cb, 0x0116, 0x00cd, 0x00ce, 0x00cf,
-        /* 0xd0 */
-                0x00d0, 0x0145, 0x014c, 0x00d3, 0x00d4, 0x00d5, 0x00d6, 0x0168,
-                0x00d8, 0x0172, 0x00da, 0x00db, 0x00dc, 0x00dd, 0x00de, 0x00df,
-        /* 0xe0 */
-                0x0101, 0x00e1, 0x00e2, 0x00e3, 0x00e4, 0x00e5, 0x00e6, 0x012f,
-                0x010d, 0x00e9, 0x0119, 0x00eb, 0x0117, 0x00ed, 0x00ee, 0x00ef,
-        /* 0xf0 */
-                0x00f0, 0x0146, 0x014d, 0x00f3, 0x00f4, 0x00f5, 0x00f6, 0x0169,
-                0x00f8, 0x0173, 0x00fa, 0x00fb, 0x00fc, 0x00fd, 0x00fe, 0x0138);
+        charMap = createCharMap(0xa0, chars );
     }
 
-    private static BiMap<Byte, Character> createCharMap(int offset, int... characters) {
+    private static BiMap<Byte, Character> createCharMap(int offset, List<Character> characters) {
         BiMap<Byte, Character> charMap = new BiMap<>();
-        for (int index = 0; index < characters.length; index++) {
-            charMap.put((byte)(index + offset), (char)characters[index]);
+        for (int index = 0; index < characters.size(); index++) {
+            charMap.put((byte)(index + offset), characters.get(index));
         }
         return charMap;
     }
 
     public ISO8859_10() {
-        super("ISO-8859-10");
+        super("ISO-8859-10", aliases);
     }
 
     @Override
@@ -104,7 +110,7 @@ public class ISO8859_10 extends SosiCharset {
 
     private static class Encoder extends SosiCharsetEncoder {
         private Encoder(Charset cs) {
-            super(cs);
+            super(cs, chars);
         }
 
         @Override

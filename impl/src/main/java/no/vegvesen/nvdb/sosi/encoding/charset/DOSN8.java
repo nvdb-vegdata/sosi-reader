@@ -35,6 +35,7 @@ import java.nio.charset.CharsetEncoder;
  * The MS-DOS Norwegian 8-bits character set.
  *
  * @author Tore Eide Andersen (Kantega AS)
+ * @author Oystein Steimler (Itema AS)
  */
 public class DOSN8 extends SosiCharset {
 
@@ -83,7 +84,7 @@ public class DOSN8 extends SosiCharset {
 
     private static class Encoder extends SosiCharsetEncoder {
         private Encoder(Charset cs) {
-            super(cs);
+            super(cs, null);
         }
 
         @Override
