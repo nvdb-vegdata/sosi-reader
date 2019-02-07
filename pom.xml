@@ -5,13 +5,13 @@
 
     <groupId>no.vegvesen.nvdb</groupId>
     <artifactId>sosi-reader</artifactId>
-    <version>1.21-SNAPSHOT</version>
+    <version>1.21</version>
 
     <packaging>pom</packaging>
 
     <scm>
         <connection>scm:git:git@github.com:nvdb-vegdata/sosi-reader.git</connection>
-        <tag>HEAD</tag>
+        <tag>sosi-reader-1.21</tag>
     </scm>
 
     <distributionManagement>
