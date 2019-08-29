@@ -77,6 +77,7 @@ public enum CoordSys {
     EUREF89_UTM35(25, 25835),       // Ref INSPIRE Req 7 (ETRS89-TM35)) EPSG 25835
     EUREF89_UTM36(26, 25836),       // Ref INSPIRE Req 7 (ETRS89-TM36)) EPSG 25836
     EUREF89_GEOGRAPHICAL(84, 4258), // Ingen projeksjon. EPSG 4258 (bredde, lengde), EPSG 4937 (bredde, lengde, ellipsoidisk høyde). Ref: INSPIRE Req 1
+    EUREF89_UTM33_NN54(23, 6173),    // EUREF89_UTM33N_NN54 - use same as EUREF89/UTM33 -- this will only be found when resolving using fromSrid()
 
     // EUREF89 NTM
     EUREF89_NTM05(205, 5105), // Norsk Transversal Mercator sone 5 (basert på EUREF89) EPSG 5105
