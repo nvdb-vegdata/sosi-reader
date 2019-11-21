@@ -26,11 +26,10 @@
 package no.vegvesen.nvdb.sosi.reader;
 
 import no.vegvesen.nvdb.sosi.SosiLocation;
-import no.vegvesen.nvdb.sosi.document.SosiNumber;
-import no.vegvesen.nvdb.sosi.document.SosiRefIsland;
-import no.vegvesen.nvdb.sosi.document.SosiRefNumber;
-import no.vegvesen.nvdb.sosi.document.SosiSerialNumber;
-import no.vegvesen.nvdb.sosi.document.SosiString;
+import no.vegvesen.nvdb.sosi.document.*;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * Factory for SosiValue instances
@@ -113,6 +112,21 @@ public class SosiValueFactory {
     public static SosiString string(String value) {
         return string(value, SosiLocation.unknown());
     }
+
+    /**
+     * Creates a SosiValue holding a datetime.
+     * @param value the datetime value
+     * @param location the location of the value inside the SOSI file
+     * @return a SosiValue instance
+     */
+    public static SosiDate date(LocalDateTime value, SosiLocation location) {return SosiDateImpl.of(value, location);}
+
+    /**
+     * Creates a SosiValue holding a datetime.
+     * @param value the datetime value
+     * @return a SosiValue instance
+     */
+    public static SosiDate date(LocalDateTime value) { return date(value, SosiLocation.unknown());}
 
     /**
      * Creates a SosiValue holding a serial number.

@@ -36,7 +36,7 @@ import static java.util.Objects.requireNonNull;
  */
 public interface SosiValue {
     enum ValueType {
-        STRING, NUMBER, SERNO, REF, REF_ISLAND, UNSPECIFIED, DEFAULT
+        STRING, NUMBER, SERNO, REF, REF_ISLAND, UNSPECIFIED, DEFAULT, DATE
     }
 
     ValueType getValueType();
