@@ -114,19 +114,34 @@ public class SosiValueFactory {
     }
 
     /**
+     * Creates a SosiValue holding a date.
+     * @param value the datetime value
+     * @param location the location of the value inside the SOSI file
+     * @return a SosiValue instance
+     */
+    public static SosiDate date(LocalDate value, SosiLocation location) {return SosiDateImpl.of(value, location);}
+
+    /**
+     * Creates a SosiValue holding a date.
+     * @param value the datetime value
+     * @return a SosiValue instance
+     */
+    public static SosiDate date(LocalDate value) { return date(value, SosiLocation.unknown());}
+
+    /**
      * Creates a SosiValue holding a datetime.
      * @param value the datetime value
      * @param location the location of the value inside the SOSI file
      * @return a SosiValue instance
      */
-    public static SosiDate date(LocalDateTime value, SosiLocation location) {return SosiDateImpl.of(value, location);}
+    public static SosiDateTime datetime(LocalDateTime value, SosiLocation location) {return SosiDateTimeImpl.of(value, location);}
 
     /**
      * Creates a SosiValue holding a datetime.
      * @param value the datetime value
      * @return a SosiValue instance
      */
-    public static SosiDate date(LocalDateTime value) { return date(value, SosiLocation.unknown());}
+    public static SosiDateTime datetime(LocalDateTime value) { return datetime(value, SosiLocation.unknown());}
 
     /**
      * Creates a SosiValue holding a serial number.

@@ -2,28 +2,26 @@ package no.vegvesen.nvdb.sosi.reader;
 
 import no.vegvesen.nvdb.sosi.SosiLocation;
 import no.vegvesen.nvdb.sosi.document.SosiDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import static java.util.Objects.requireNonNull;
 
 /**
- * Implements a SOSI date/datetime.
+ * Implements a SOSI date.
  *
  * @author Anders Sørenmo Påsche (Kantega AS)
  */
 public class SosiDateImpl implements SosiDate {
-    private final LocalDateTime value;
+    private final LocalDate value;
     private final SosiLocation location;
     private static final DateTimeFormatter SOSI_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd");
-    private static final DateTimeFormatter SOSI_DATETIME_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 
-    static SosiDate of(LocalDateTime value, SosiLocation location) {
+    static SosiDate of(LocalDate value, SosiLocation location) {
         return new SosiDateImpl(value, location);
     }
 
-    SosiDateImpl(LocalDateTime value, SosiLocation location) {
+    SosiDateImpl(LocalDate value, SosiLocation location) {
         this.value = requireNonNull(value, "value can't be null");
         this.location = requireNonNull(location, "location can't be null");
     }
@@ -31,11 +29,6 @@ public class SosiDateImpl implements SosiDate {
     @Override
     public String getDate() {
         return value.format(SOSI_DATE_FORMATTER);
-    }
-
-    @Override
-    public String getDateTime() {
-        return value.format(SOSI_DATETIME_FORMATTER);
     }
 
     @Override
@@ -50,8 +43,7 @@ public class SosiDateImpl implements SosiDate {
 
     @Override
     public String getString() {
-        if(value.toLocalTime().equals(LocalTime.MIDNIGHT)) return getDate();
-        else return getDateTime();
+        return getDate();
     }
 
     @Override
@@ -61,7 +53,7 @@ public class SosiDateImpl implements SosiDate {
 
     @Override
     public int hashCode() {
-        return getDateTime().hashCode();
+        return getDate().hashCode();
     }
 
     @Override
@@ -70,6 +62,6 @@ public class SosiDateImpl implements SosiDate {
             return false;
         }
         SosiDate other = (SosiDate) obj;
-        return getDateTime().equals(other.getDateTime());
+        return getDate().equals(other.getDate());
     }
 }

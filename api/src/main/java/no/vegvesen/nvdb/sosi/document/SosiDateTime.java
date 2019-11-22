@@ -1,12 +1,12 @@
 package no.vegvesen.nvdb.sosi.document;
 
 /**
- * An immutable SOSI date value.
+ * An immutable SOSI datetime value.
  *
  * @author Anders Sørenmo Påsche (Kantega AS)
  */
-public interface SosiDate extends SosiValue {
-    String getDate();
+public interface SosiDateTime extends SosiValue {
+    String getDateTime();
 
     @Override
     int hashCode();
