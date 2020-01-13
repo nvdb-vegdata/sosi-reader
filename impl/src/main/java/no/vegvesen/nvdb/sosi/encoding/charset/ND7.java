@@ -35,6 +35,7 @@ import java.nio.charset.CharsetEncoder;
  * The Norsk Data 7-bits character set.
  *
  * @author Tore Eide Andersen (Kantega AS)
+ * @author Oystein Steimler (Itema AS)
  */
 public class ND7 extends SosiCharset {
 
@@ -83,7 +84,7 @@ public class ND7 extends SosiCharset {
 
     private static class Encoder extends SosiCharsetEncoder {
         private Encoder(Charset cs) {
-            super(cs);
+            super(cs, null);
         }
 
         @Override

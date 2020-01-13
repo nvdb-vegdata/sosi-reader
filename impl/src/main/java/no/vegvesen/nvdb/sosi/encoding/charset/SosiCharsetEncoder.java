@@ -30,6 +30,7 @@ import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CoderResult;
+import java.util.List;
 
 /**
  * Generic charset encoder for SOSI output stream writers.
@@ -37,15 +38,24 @@ import java.nio.charset.CoderResult;
  * Based on the Java ISO-8859-1 charset encoder class.
  *
  * @author Tore Eide Andersen (Kantega AS)
+ * @author Oystein Steimler (Itema AS)
  */
 abstract class SosiCharsetEncoder extends CharsetEncoder {
-    SosiCharsetEncoder(Charset cs) {
+
+    private List<Character> chars;
+
+    SosiCharsetEncoder(Charset cs, List<Character> chars) {
         super(cs, 1.0f, 1.0f);
+        this.chars = chars;
     }
 
     @Override
     public boolean canEncode(char c) {
-        return c <= '\u00FF';
+        if ( chars == null ) {
+            return c <= '\u00FF';
+        } else {
+           return chars.contains(c) ;
+        }
     }
 
     @Override
@@ -106,7 +116,7 @@ abstract class SosiCharsetEncoder extends CharsetEncoder {
         try {
             while (src.hasRemaining()) {
                 char c = src.get();
-                if (c <= '\u00FF') {
+                if (canEncode(c)) {
                     if (!dst.hasRemaining())
                         return CoderResult.OVERFLOW;
                     dst.put(fromUtf16(c));
