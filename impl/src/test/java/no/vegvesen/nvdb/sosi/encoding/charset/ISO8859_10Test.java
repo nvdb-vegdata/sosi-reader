@@ -34,25 +34,13 @@ public class ISO8859_10Test {
     }
 
     @Test
-    public void testEncodeSami8bitCharsBufferLoop() {
-        String samiChars = "Áá";
+    public void testEncodeSamiCharsBufferLoop() {
+        String samiChars = "ÁŅōĪŋš";
 
         Charset cs = new ISO8859_10();
         ByteBuffer encoded = cs.encode(samiChars);
 
-        ByteBuffer expected = ByteBuffer.wrap(new byte[] {(byte)0xc1, (byte)0xe1});
-
-        assertThat( encoded.array(), equalTo(expected.array()));
-    }
-
-    @Test
-    public void testEncodeSami16bitCharsBufferLoop() {
-        String samiChars = "š";
-
-        Charset cs = new ISO8859_10();
-        ByteBuffer encoded = cs.encode(samiChars);
-
-        ByteBuffer expected = ByteBuffer.wrap(new byte[] {(byte)0xba});
+        ByteBuffer expected = ByteBuffer.wrap(new byte[] {(byte)0xc1, (byte)0xd1, (byte)0xf2, (byte)0xa4, (byte)0xbf, (byte)0xba});
 
         assertThat( encoded.array(), equalTo(expected.array()));
     }
@@ -72,26 +60,13 @@ public class ISO8859_10Test {
 
     @Test
     public void testEncodeSami8bitCharsArrayLoop() {
-        char[] samiChars = {'Á', 'á'};
+        char[] samiChars = {'Á', 'Ņ', 'ō', 'Ī', 'ŋ', 'š'};
         CharBuffer samiCharsBuffer = CharBuffer.wrap(samiChars, 0, samiChars.length);
         ByteBuffer encoded = ByteBuffer.allocate(samiChars.length);
         Charset cs = new ISO8859_10();
 
         cs.newEncoder().encode(samiCharsBuffer, encoded, true);
-        ByteBuffer expected = ByteBuffer.wrap(new byte[] {(byte)0xc1, (byte)0xe1});
-
-        assertThat( encoded.array(), equalTo(expected.array()));
-    }
-
-    @Test
-    public void testEncodeSami16bitCharsArrayLoop() {
-        char[] samiChars = {'ŋ'};
-        CharBuffer samiCharsBuffer = CharBuffer.wrap(samiChars, 0, samiChars.length);
-        ByteBuffer encoded = ByteBuffer.allocate(samiChars.length);
-        Charset cs = new ISO8859_10();
-
-        cs.newEncoder().encode(samiCharsBuffer, encoded, true);
-        ByteBuffer expected = ByteBuffer.wrap(new byte[] {(byte)0xbf});
+        ByteBuffer expected = ByteBuffer.wrap(new byte[] {(byte)0xc1, (byte)0xd1, (byte)0xf2, (byte)0xa4, (byte)0xbf, (byte)0xba});
 
         assertThat( encoded.array(), equalTo(expected.array()));
     }

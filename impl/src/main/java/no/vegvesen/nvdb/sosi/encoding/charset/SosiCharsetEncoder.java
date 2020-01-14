@@ -43,23 +43,23 @@ import java.util.List;
 abstract class SosiCharsetEncoder extends CharsetEncoder {
 
     private List<Character> chars;
-    private Character rangeMax;
+    private Character replacementCodePoint;
     private byte repl = (byte)'?';
 
     SosiCharsetEncoder(Charset cs, List<Character> chars) {
         this(cs, chars, '\u00FF');
     }
 
-    SosiCharsetEncoder(Charset cs, List<Character> chars, Character rangeMax) {
+    SosiCharsetEncoder(Charset cs, List<Character> chars, Character replacementCodePoint) {
         super(cs, 1.0f, 1.0f);
         this.chars = chars;
-        this.rangeMax = rangeMax;
+        this.replacementCodePoint = replacementCodePoint;
     }
 
     @Override
     public boolean canEncode(char c) {
         if ( chars == null ) {
-            return c <= rangeMax;
+            return c <= replacementCodePoint;
         } else {
            return chars.contains(c) ;
         }
@@ -77,7 +77,7 @@ abstract class SosiCharsetEncoder extends CharsetEncoder {
         int i = 0;
         for (; i < len; i++) {
             char c = sa[sp++];
-            if (c > rangeMax) {
+            if (c > replacementCodePoint) {
                 da[dp++] = repl;
             } else {
                 da[dp++] = fromUtf16(c);
