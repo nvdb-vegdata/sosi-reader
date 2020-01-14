@@ -110,7 +110,12 @@ public class ISO8859_10 extends SosiCharset {
 
     private static class Encoder extends SosiCharsetEncoder {
         private Encoder(Charset cs) {
-            super(cs, chars);
+            super(cs, chars, '\u017F'); // Basic latin + Latin-1 Supplement + Latin Extended-A
+        }
+
+        @Override
+        public boolean canEncode(char c) {
+            return c <= '\u017F';
         }
 
         @Override
