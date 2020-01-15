@@ -42,6 +42,7 @@ import java.util.List;
 public class ISO8859_10 extends SosiCharset {
 
     private final static String[] aliases = {"ISO8859-10", "8859-10", "latin6"};
+    private final static Character replacementCodePoint = '\u017F'; // Basic latin + Latin-1 Supplement + Latin Extended-A
 
     private final static List<Character> chars = Arrays.asList(
         /* 0xa0 */
@@ -110,7 +111,12 @@ public class ISO8859_10 extends SosiCharset {
 
     private static class Encoder extends SosiCharsetEncoder {
         private Encoder(Charset cs) {
-            super(cs, chars);
+            super(cs, chars, replacementCodePoint);
+        }
+
+        @Override
+        public boolean canEncode(char c) {
+            return c <= replacementCodePoint;
         }
 
         @Override

@@ -43,16 +43,23 @@ import java.util.List;
 abstract class SosiCharsetEncoder extends CharsetEncoder {
 
     private List<Character> chars;
+    private Character replacementCodePoint;
+    private byte repl = (byte)'?';
 
     SosiCharsetEncoder(Charset cs, List<Character> chars) {
+        this(cs, chars, '\u00FF');
+    }
+
+    SosiCharsetEncoder(Charset cs, List<Character> chars, Character replacementCodePoint) {
         super(cs, 1.0f, 1.0f);
         this.chars = chars;
+        this.replacementCodePoint = replacementCodePoint;
     }
 
     @Override
     public boolean canEncode(char c) {
         if ( chars == null ) {
-            return c <= '\u00FF';
+            return c <= replacementCodePoint;
         } else {
            return chars.contains(c) ;
         }
@@ -70,9 +77,11 @@ abstract class SosiCharsetEncoder extends CharsetEncoder {
         int i = 0;
         for (; i < len; i++) {
             char c = sa[sp++];
-            if (c > '\u00FF')
-                break;
-            da[dp++] = fromUtf16(c);
+            if (c > replacementCodePoint) {
+                da[dp++] = repl;
+            } else {
+                da[dp++] = fromUtf16(c);
+            }
         }
         return i;
     }
@@ -140,8 +149,6 @@ abstract class SosiCharsetEncoder extends CharsetEncoder {
         else
             return encodeBufferLoop(src, dst);
     }
-
-    private byte repl = (byte)'?';
 
     @Override
     protected void implReplaceWith(byte[] newReplacement) {
