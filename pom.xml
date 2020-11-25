@@ -64,41 +64,28 @@
         </dependencies>
     </dependencyManagement>
 
-    <profiles>
-        <profile>
-            <id>svv-artifactory</id>
-            <repositories>
-                <repository>
-                    <id>svv-locallibs</id>
-                    <url>https://artrepo.vegvesen.no/artifactory/all-maven-repos</url>
-                    <releases>
-                        <enabled>true</enabled>
-                    </releases>
-                    <snapshots>
-                        <enabled>true</enabled>
-                    </snapshots>
-                </repository>
-            </repositories>
-        </profile>
-        <profile>
+    <repositories>
+        <repository>
             <id>kantega-nexus</id>
-            <repositories>
-                <repository>
-                    <id>opensource.kantega.no-locallibs</id>
-                    <url>https://opensource.kantega.no/nexus/content/groups/public</url>
-                    <releases>
-                        <enabled>true</enabled>
-                    </releases>
-                    <snapshots>
-                        <enabled>false</enabled>
-                    </snapshots>
-                </repository>
-            </repositories>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-        </profile>
-    </profiles>
+            <url>https://opensource.kantega.no/nexus/content/groups/public</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>svv-artifactory</id>
+            <url>https://artrepo.vegvesen.no/artifactory/all-maven-repos</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 
     <build>
         <pluginManagement>
