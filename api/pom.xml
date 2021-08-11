@@ -6,8 +6,7 @@
     <parent>
         <groupId>no.vegvesen.nvdb</groupId>
         <artifactId>sosi-reader</artifactId>
-        <version>1.27-SNAPSHOT</version>
-        <relativePath>../wrapper/pom.xml</relativePath>
+        <version>1.26-SNAPSHOT</version>
     </parent>
 
     <artifactId>sosi-reader-api</artifactId>
