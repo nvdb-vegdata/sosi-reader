@@ -5,7 +5,7 @@
 
     <groupId>no.vegvesen.nvdb</groupId>
     <artifactId>sosi-reader</artifactId>
-    <version>1.26-SNAPSHOT</version>
+    <version>1.26</version>
 
     <packaging>pom</packaging>
 
@@ -31,7 +31,8 @@
         <connection>scm:git:git@github.com:nvdb-vegdata/sosi-reader.git</connection>
         <developerConnection>scm:git:ssh://github.com:nvdb-vegdata/sosi-reader.git</developerConnection>
         <url>https://github.com/nvdb-vegdata/sosi-reader/tree/master</url>
-    </scm>
+      <tag>sosi-reader-1.26</tag>
+  </scm>
 
     <distributionManagement>
         <snapshotRepository>
