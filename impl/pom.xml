@@ -6,7 +6,7 @@
     <parent>
         <groupId>no.vegvesen.nvdb</groupId>
         <artifactId>sosi-reader</artifactId>
-        <version>1.26-SNAPSHOT</version>
+        <version>1.26</version>
     </parent>
 
     <artifactId>sosi-reader-impl</artifactId>
