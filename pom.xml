@@ -85,16 +85,6 @@
 
     <repositories>
         <repository>
-            <id>kantega-nexus</id>
-            <url>https://opensource.kantega.no/nexus/content/groups/public</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
             <id>svv-artifactory</id>
             <url>https://artrepo.vegvesen.no/artifactory/all-maven-repos</url>
             <releases>
