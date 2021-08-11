@@ -1,28 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
+    <name>sosi-reader</name>
+    <url>https://github.com/nvdb-vegdata/sosi-reader</url>
+    <description>Java streaming parser + reader for the SOSI file format</description>
+
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>no.vegvesen.nvdb</groupId>
     <artifactId>sosi-reader</artifactId>
-    <version>1.26-SNAPSHOT</version>
+    <version>1.26</version>
 
     <packaging>pom</packaging>
 
+    <licenses>
+        <license>
+            <name>BSD 2-Clause</name>
+            <url>https://opensource.org/licenses/BSD-2-Clause</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>kantega</id>
+            <organization>Kantega</organization>
+        </developer>
+        <developer>
+            <id>capgemini</id>
+            <organization>Capgemini</organization>
+        </developer>
+    </developers>
+
     <scm>
         <connection>scm:git:git@github.com:nvdb-vegdata/sosi-reader.git</connection>
-        <tag>HEAD</tag>
+        <developerConnection>scm:git:ssh://github.com:nvdb-vegdata/sosi-reader.git</developerConnection>
+        <url>https://github.com/nvdb-vegdata/sosi-reader/tree/master</url>
+        <tag>sosi-reader-1.26</tag>
     </scm>
 
     <distributionManagement>
-        <snapshotRepository>
-            <id>svv-artifactory-snapshots</id>
-            <url>https://artrepo.vegvesen.no/artifactory/libs-snapshot-local</url>
-        </snapshotRepository>
-        <repository>
-            <id>svv-artifactory-releases</id>
-            <url>https://artrepo.vegvesen.no/artifactory/libs-release-local</url>
-        </repository>
+    <snapshotRepository>
+        <id>ossrh</id>
+        <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+    <repository>
+        <id>ossrh</id>
+        <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
     </distributionManagement>
 
     <properties>
@@ -66,16 +90,6 @@
 
     <repositories>
         <repository>
-            <id>kantega-nexus</id>
-            <url>https://opensource.kantega.no/nexus/content/groups/public</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
             <id>svv-artifactory</id>
             <url>https://artrepo.vegvesen.no/artifactory/all-maven-repos</url>
             <releases>
@@ -88,30 +102,68 @@
     </repositories>
 
     <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <configuration>
-                        <source>1.8</source>
-                        <target>1.8</target>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>2.10.1</version>
-                    <configuration>
-                        <failOnError>false</failOnError>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.17</version>
-                    <configuration>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.8</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.3.0</version>
+                <configuration>
+                    <doclint>none</doclint>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
 </project>
